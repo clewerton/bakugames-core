@@ -27,36 +27,17 @@ public class Entity implements Renderable, Updateable {
   
   // component management
   public void plug(Component c) {
-    if(c == null)
-      return;
-    
-    Component cPrime = get(c.getId());
-    if(cPrime == c)
-      return;
-    
-    if(cPrime != null)
-      throw new IdConflictException(c.getId());
-    
     plugComponent(c);
   }
 
   public Component unplug(String id) {
-    if(id == null)
-      return null;
-    
     return unplugComponent(id);
   }
 
   public Component swap(Component c) {
-    if(c == null)
-      return null;
-    
-    Component old = unplugComponent(c.getId());
-    plugComponent(c);
-    
-    return old;
+    return swapComponent(c);
   }
-  
+
   public Component get(String id) {
     if(id == null)
       return null;
@@ -71,8 +52,17 @@ public class Entity implements Renderable, Updateable {
     return componentMap.containsKey(id);
   }
   
-  // TODO the preconditions are tested in plug, put them here?
   protected void plugComponent(Component c) {
+    if(c == null)
+      return;
+    
+    Component cPrime = get(c.getId());
+    if(cPrime == c)
+      return;
+    
+    if(cPrime != null)
+      throw new IdConflictException(c.getId());
+    
     c.setOwner(this);
     
     componentMap.put(c.getId(), c);
@@ -84,8 +74,10 @@ public class Entity implements Renderable, Updateable {
       updateableComponents.add((Updateable) c);
   }
   
-  // TODO the preconditions are tested in unplug, put them here?
   protected Component unplugComponent(String id) {
+    if(id == null)
+      return null;
+    
     Component c = componentMap.remove(id);
     
     if(c == null)
@@ -102,6 +94,16 @@ public class Entity implements Renderable, Updateable {
     return c;
   }
 
+  protected Component swapComponent(Component c) {
+    if(c == null)
+      return null;
+    
+    Component old = unplugComponent(c.getId());
+    plugComponent(c);
+    
+    return old;
+  }
+  
   // Slick operations
   @Override
   public void render(GameContainer gc, StateBasedGame sb, Graphics gr) {

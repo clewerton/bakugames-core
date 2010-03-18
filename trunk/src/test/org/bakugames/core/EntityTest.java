@@ -10,6 +10,8 @@ import static util.TestUtils.assertComponentNotPluggedIn;
 import static util.TestUtils.assertComponentPluggedIn;
 
 import mock.RenderableAndUpdateableComponent;
+import mock.RenderableComponent;
+import mock.UpdateableComponent;
 
 import org.bakugames.core.Component;
 import org.bakugames.core.Entity;
@@ -166,18 +168,29 @@ public class EntityTest {
   @Test
   public void render() {
     RenderableAndUpdateableComponent c = new RenderableAndUpdateableComponent("id", e);
+    RenderableComponent r = new RenderableComponent("r", e);
+    UpdateableComponent u = new UpdateableComponent("u", e);
     
     assertEquals(0, c.renderCount);
+    assertEquals(0, r.renderCount);
+    
     assertEquals(0, c.updateCount);
+    assertEquals(0, u.updateCount);
     
     e.render(null, null, null);
     
     assertEquals(1, c.renderCount);
+    assertEquals(1, r.renderCount);
+    
     assertEquals(0, c.updateCount);
+    assertEquals(0, u.updateCount);
     
     e.update(null, null, 0);
     
     assertEquals(1, c.renderCount);
+    assertEquals(1, r.renderCount);
+    
     assertEquals(1, c.updateCount);
+    assertEquals(1, u.updateCount);
   }
 }
