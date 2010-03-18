@@ -45,6 +45,14 @@ public class Entity implements Renderable, Updateable {
     return componentMap.get(id);
   }
   
+  public <T> T getAs(String id, Class<T> type) {
+    Component c = get(id);
+    if(c == null)
+      return null;
+    
+    return c.as(type);
+  }
+  
   public boolean has(String id) {
     if(id == null)
       return false;
