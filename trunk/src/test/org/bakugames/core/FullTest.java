@@ -1,3 +1,4 @@
+package org.bakugames.core;
 import org.bakugames.core.ComponentTest;
 import org.bakugames.core.EntityTest;
 import org.junit.runner.RunWith;

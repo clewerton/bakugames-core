@@ -8,13 +8,12 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static util.TestUtils.assertComponentNotPluggedIn;
 import static util.TestUtils.assertComponentPluggedIn;
+import static util.TestUtils.assertCompatible;
 
 import mock.RenderableAndUpdateableComponent;
 import mock.RenderableComponent;
 import mock.UpdateableComponent;
 
-import org.bakugames.core.Component;
-import org.bakugames.core.Entity;
 import org.bakugames.core.exception.IdConflictException;
 import org.junit.Before;
 import org.junit.Test;
@@ -148,6 +147,38 @@ public class EntityTest {
   @Test
   public void getUnknown() {
     assertNull(e.get(null));
+  }
+  
+  @Test
+  public void getAs() {
+    RenderableComponent r = new RenderableComponent("r", e);
+    
+    assertSame(r, e.getAs(r.getId(), Renderable.class));
+    assertCompatible(Renderable.class, e.getAs(r.getId(), Renderable.class));
+  }
+  
+  @Test
+  public void getAsNullId() {
+    assertNull(e.getAs(null, Component.class));
+  }
+  
+  @Test(expected = IllegalArgumentException.class)
+  public void getAsNullType() {
+    e.getAs("id", null);
+  }
+  
+  @Test
+  public void getAsUnknownComponent() {
+    assertNull(e.getAs("", Component.class));
+  }
+  
+  @Test(expected = ClassCastException.class)
+  public void getAsInvalidType() {
+    Component c = new Component("id", e);
+    
+    assertComponentPluggedIn(e, c);
+    
+    e.getAs("id", String.class);
   }
   
   @Test
