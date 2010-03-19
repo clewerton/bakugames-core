@@ -1,6 +1,6 @@
-package org.bakugames.core.entity;
+package org.bakugames.core;
 
-import org.bakugames.core.entity.exception.IdConflictException;
+import org.bakugames.core.exception.IdConflictException;
 
 public class Component {
   private Entity owner;

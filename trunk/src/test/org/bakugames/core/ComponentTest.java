@@ -1,4 +1,4 @@
-package org.bakugames.core.entity;
+package org.bakugames.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -9,10 +9,10 @@ import static util.TestUtils.assertComponentPluggedIn;
 
 import mock.RenderableAndUpdateableComponent;
 
+import org.bakugames.core.Component;
+import org.bakugames.core.Entity;
 import org.bakugames.core.Renderable;
-import org.bakugames.core.entity.Component;
-import org.bakugames.core.entity.Entity;
-import org.bakugames.core.entity.exception.IdConflictException;
+import org.bakugames.core.exception.IdConflictException;
 import org.junit.Before;
 import org.junit.Test;
 

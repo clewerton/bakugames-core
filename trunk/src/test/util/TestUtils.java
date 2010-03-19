@@ -5,8 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-import org.bakugames.core.entity.Component;
-import org.bakugames.core.entity.Entity;
+import org.bakugames.core.Component;
+import org.bakugames.core.Entity;
+import org.bakugames.core.World;
 
 public class TestUtils {
   public static void assertComponentNotPluggedIn(Entity e, Component c) {
@@ -28,5 +29,15 @@ public class TestUtils {
     assertNotNull(actual);
     
     assertTrue(expected.isAssignableFrom(actual.getClass()));
+  }
+
+  public static void assertEntityInWorld(World w, Entity e) {
+    assertSame(w, e.getWorld());
+    assertTrue(w.contains(e));
+  }
+  
+  public static void assertEntityNotInWorld(World w, Entity e) {
+    assertNotSame(w, e.getWorld());
+    assertFalse(w.contains(e));
   }
 }
