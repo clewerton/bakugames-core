@@ -1,6 +1,6 @@
 package org.bakugames.core;
-import org.bakugames.core.ComponentTest;
-import org.bakugames.core.EntityTest;
+import org.bakugames.core.entity.ComponentTest;
+import org.bakugames.core.entity.EntityTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;

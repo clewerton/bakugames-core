@@ -5,8 +5,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-import org.bakugames.core.Component;
-import org.bakugames.core.Entity;
+import org.bakugames.core.entity.Component;
+import org.bakugames.core.entity.Entity;
 
 public class TestUtils {
   public static void assertComponentNotPluggedIn(Entity e, Component c) {

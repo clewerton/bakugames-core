@@ -1,11 +1,13 @@
-package org.bakugames.core;
+package org.bakugames.core.entity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bakugames.core.exception.IdConflictException;
+import org.bakugames.core.Renderable;
+import org.bakugames.core.Updateable;
+import org.bakugames.core.entity.exception.IdConflictException;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.StateBasedGame;
@@ -15,7 +17,7 @@ public class Entity implements Renderable, Updateable {
   
   // these two lists are backed by componentMap, so they won't be
   // accessed anywhere else but here 
-  private List<Renderable> renderableComponents;
+  private List<Renderable> renderableComponents; // TODO sort by z-order
   private List<Updateable> updateableComponents;
   
   public Entity() {

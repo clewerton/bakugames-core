@@ -1,4 +1,4 @@
-package org.bakugames.core.exception;
+package org.bakugames.core.entity.exception;
 
 public class IdConflictException extends RuntimeException {
   private static final long serialVersionUID = 1L;
