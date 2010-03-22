@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.bakugames.core.exception.ComponentIdMismatchException;
 import org.bakugames.core.exception.IdConflictException;
+import org.bakugames.util.CompareUtils;
 import org.bakugames.util.SortedList;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -103,6 +104,10 @@ public class Entity implements Renderable, Updateable {
     this(null, 0);
   }
   
+  public Entity(int zOrder) {
+    this(null, zOrder);
+  }
+  
   public Entity(World world) {
     this(world, 0);
   }
@@ -174,14 +179,7 @@ public class Entity implements Renderable, Updateable {
   // interface methods
   @Override
   public int compareTo(Renderable o) {
-    int thatZOrder = (o != null ? o.getZOrder() : 0);
-    int thisZOrder = getZOrder();
-    
-    return (thisZOrder < thatZOrder 
-         ? -1 
-         : (thisZOrder == thatZOrder 
-             ? 0 
-             : 1));
+    return CompareUtils.compareTo(this, o);
   }
   
   // Slick operations

@@ -3,9 +3,12 @@ package org.bakugames.core;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static util.TestUtils.assertEntityInWorld;
 import static util.TestUtils.assertEntityNotInWorld;
+
+import java.util.List;
 
 import org.bakugames.core.mock.RenderableAndUpdateableComponent;
 import org.bakugames.core.mock.RenderableComponent;
@@ -165,4 +168,59 @@ public class WorldTest {
     
     assertTrue(e0.nanoTime + ", " + e1.nanoTime, e0.nanoTime < e1.nanoTime);
   } 
+  
+  @Test
+  public void entityList() {
+    List<Entity> entities = w.getEntities();
+    
+    Entity e1 = new Entity(w, 1);
+    Entity e2 = new Entity(2);
+    entities.add(e2);
+    
+    Entity e0 = new Entity(w, 0);
+   
+    assertEquals(3, entities.size());
+    
+    assertSame(e0, entities.get(0));
+    assertSame(e1, entities.get(1));
+    assertSame(e2, entities.get(2));
+    
+    assertEntityInWorld(w, e0);
+    assertEntityInWorld(w, e1);
+    assertEntityInWorld(w, e2);
+    
+    entities.clear();
+    
+    assertEquals(0, entities.size());
+    
+    assertEntityNotInWorld(w, e0);
+    assertEntityNotInWorld(w, e1);
+    assertEntityNotInWorld(w, e2);
+  }
+  
+  @Test
+  public void entityListAddNull() {
+    List<Entity> entities = w.getEntities();
+    
+    assertEquals(0, entities.size());
+    
+    entities.add(null);
+    
+    assertEquals(0, entities.size());
+  }
+  
+  @Test
+  public void entityListAddRedundant() {
+    Entity e = new Entity(w);
+    
+    List<Entity> entities = w.getEntities();
+    
+    assertEquals(1, entities.size());
+    assertEntityInWorld(w, e);
+    
+    entities.add(e);
+    
+    assertEquals(1, entities.size());
+    assertEntityInWorld(w, e);
+  }
 }
