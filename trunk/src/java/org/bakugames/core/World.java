@@ -3,6 +3,7 @@ package org.bakugames.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bakugames.util.CompareUtils;
 import org.bakugames.util.SortedList;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -96,14 +97,7 @@ public class World implements Renderable, Updateable {
   // interface methods
   @Override
   public int compareTo(Renderable o) {
-    int thatZOrder = (o != null ? o.getZOrder() : 0);
-    int thisZOrder = getZOrder();
-    
-    return (thisZOrder < thatZOrder 
-         ? -1 
-         : (thisZOrder == thatZOrder 
-             ? 0 
-             : 1));
+    return CompareUtils.compareTo(this, o);
   }
   
   // Slick methods
