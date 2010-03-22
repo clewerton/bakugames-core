@@ -1,4 +1,4 @@
-package mock;
+package org.bakugames.core.mock;
 
 import org.bakugames.core.Component;
 import org.bakugames.core.Entity;
