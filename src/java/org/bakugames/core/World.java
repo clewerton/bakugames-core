@@ -3,6 +3,7 @@ package org.bakugames.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bakugames.util.SortedList;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.StateBasedGame;
@@ -30,6 +31,18 @@ public class World implements Renderable, Updateable {
       
       return true;
     }
+    
+    @Override
+    public void add(int index, Entity e) {
+      if(e == null)
+        return;
+      
+      if(contains(e))
+        return;
+      
+      super.add(index, e);
+      e.setWorld(world);
+    }
 
     @Override
     public boolean contains(Object e) {
@@ -51,12 +64,20 @@ public class World implements Renderable, Updateable {
       
       return result;
     }
+    
+    @Override
+    public void clear() {
+      Entity[] entities = toArray(new Entity[size()]);
+      
+      for(Entity e : entities)
+        remove(e);
+    }
   }
 
   private List<Entity> entities;
 
   public World() {
-    setEntities0(new EntityList(this));
+    setEntities0(new SortedList(new EntityList(this)));
   }
 
   // entity management
@@ -70,6 +91,19 @@ public class World implements Renderable, Updateable {
   
   public void remove(Entity e) {
     getEntities().remove(e);
+  }
+  
+  // interface methods
+  @Override
+  public int compareTo(Renderable o) {
+    int thatZOrder = (o != null ? o.getZOrder() : 0);
+    int thisZOrder = getZOrder();
+    
+    return (thisZOrder < thatZOrder 
+         ? -1 
+         : (thisZOrder == thatZOrder 
+             ? 0 
+             : 1));
   }
   
   // Slick methods
@@ -100,5 +134,10 @@ public class World implements Renderable, Updateable {
 
   private void setEntities0(List<Entity> entities) {
     this.entities = entities;
+  }
+
+  @Override
+  public int getZOrder() {
+    return 0;
   }
 }

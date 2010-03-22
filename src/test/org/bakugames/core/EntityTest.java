@@ -321,4 +321,22 @@ public class EntityTest {
     assertNull(componentMap.put("id", null));
     assertEquals(0, componentMap.size());
   }
+  
+  @Test
+  public void zOrder() {
+    RenderableComponent r0 = new RenderableComponent("r0");
+    r0.zOrder = 0;
+    RenderableComponent r1 = new RenderableComponent("r1");
+    r1.zOrder = 1;
+    
+    e.plug(r1);
+    e.plug(r0);
+    
+    assertEquals(0, r0.nanoTime);
+    assertEquals(0, r1.nanoTime);
+    
+    e.render(null, null, null);
+    
+    assertTrue(r0.nanoTime + ", " + r1.nanoTime, r0.nanoTime < r1.nanoTime);
+  }
 }

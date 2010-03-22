@@ -35,11 +35,13 @@ public class SlickBasicGame extends BasicGameState {
     world = new World();
     
     // TODO deal with z-order!
+    plane = new Entity(world);
+    plane.plug(new Body(new Image("src/test/mock/simpletestgame/trollface.png"), 400, 300, 0));
+    plane.setZOrder(1);
+    
     land = new Entity(world);
     land.plug(new BackgroundRenderer(new Image("src/test/mock/simpletestgame/land.jpg")));
-    
-    plane = new Entity(world);
-    plane.plug(new Body(new Image("src/test/mock/simpletestgame/trollface.png"), 400, 300));
+    land.setZOrder(0);
   }
 
   @Override

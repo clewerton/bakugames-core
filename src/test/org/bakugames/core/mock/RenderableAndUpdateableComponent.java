@@ -11,6 +11,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public class RenderableAndUpdateableComponent extends Component implements Renderable, Updateable {
   public int renderCount = 0;
   public int updateCount = 0;
+  public int zOrder = 0;
   
   public RenderableAndUpdateableComponent(String id) {
     super(id);
@@ -28,5 +29,16 @@ public class RenderableAndUpdateableComponent extends Component implements Rende
   @Override
   public void update(GameContainer gc, StateBasedGame sb, int delta) {
     updateCount++;
+  }
+
+  @Override
+  public int getZOrder() {
+    return zOrder;
+  }
+
+  // interface methods
+  @Override
+  public int compareTo(Renderable o) {
+    return getZOrder() - (o != null ? o.getZOrder() : 0);
   }
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.bakugames.core.exception.ComponentIdMismatchException;
 import org.bakugames.core.exception.IdConflictException;
+import org.bakugames.util.SortedList;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.StateBasedGame;
@@ -91,6 +92,7 @@ public class Entity implements Renderable, Updateable {
 
   private World world;
   private Map<String, Component> componentMap;
+  private int zOrder;
   
   // these two lists are backed by componentMap, so they won't be
   // accessed anywhere else but here 
@@ -104,7 +106,7 @@ public class Entity implements Renderable, Updateable {
   public Entity(World world) {
     setWorld0(world);
     
-    renderableComponents = new ArrayList<Renderable>();
+    renderableComponents = new SortedList(new ArrayList<Renderable>());
     updateableComponents = new ArrayList<Updateable>();
     
     componentMap = new ComponentMap(this);
@@ -163,6 +165,19 @@ public class Entity implements Renderable, Updateable {
     return old;
   }
   
+  // interface methods
+  @Override
+  public int compareTo(Renderable o) {
+    int thatZOrder = (o != null ? o.getZOrder() : 0);
+    int thisZOrder = getZOrder();
+    
+    return (thisZOrder < thatZOrder 
+         ? -1 
+         : (thisZOrder == thatZOrder 
+             ? 0 
+             : 1));
+  }
+  
   // Slick operations
   @Override
   public void render(GameContainer gc, StateBasedGame sb, Graphics gr) {
@@ -208,5 +223,14 @@ public class Entity implements Renderable, Updateable {
     
     if(world != null)
       world.add(this);
+  }
+
+  @Override
+  public int getZOrder() {
+    return zOrder;
+  }
+
+  public void setZOrder(int zOrder) {
+    this.zOrder = zOrder;
   }
 }
