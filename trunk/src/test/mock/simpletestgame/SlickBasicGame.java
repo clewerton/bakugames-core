@@ -9,6 +9,7 @@ import org.bakugames.core.World;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -34,23 +35,25 @@ public class SlickBasicGame extends BasicGameState {
   public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
     world = new World();
     
-    // TODO deal with z-order!
-    plane = new Entity(world);
+    plane = new Entity(world, 1);
     plane.plug(new Body(new Image("src/test/mock/simpletestgame/trollface.png"), 400, 300, 0));
-    plane.setZOrder(1);
     
-    land = new Entity(world);
+    land = new Entity(world, 0);
     land.plug(new BackgroundRenderer(new Image("src/test/mock/simpletestgame/land.jpg")));
-    land.setZOrder(0);
   }
 
   @Override
   public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-    world.update(gc, null, delta);
+    Input input = gc.getInput();
+    
+    if(input.isKeyDown(Input.KEY_ESCAPE))
+      System.exit(0);
+    
+    world.update(gc, sbg, delta);
   }
 
   @Override
   public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-    world.render(gc, null, g);
+    world.render(gc, sbg, g);
   }
 }

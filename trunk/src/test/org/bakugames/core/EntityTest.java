@@ -36,7 +36,7 @@ public class EntityTest {
   @Test
   public void buildWithNull() {
     World w = new World();
-    Entity e = new Entity(null);
+    Entity e = new Entity(null, 0);
     
     assertNull(e.getWorld());
     assertFalse(w.contains(e));
@@ -45,7 +45,7 @@ public class EntityTest {
   @Test
   public void buildWithWorld() {
     World w = new World();
-    Entity e = new Entity(w);
+    Entity e = new Entity(w, 0);
     
     assertEntityInWorld(w, e);
   }
@@ -324,10 +324,8 @@ public class EntityTest {
   
   @Test
   public void zOrder() {
-    RenderableComponent r0 = new RenderableComponent("r0");
-    r0.zOrder = 0;
-    RenderableComponent r1 = new RenderableComponent("r1");
-    r1.zOrder = 1;
+    RenderableComponent r0 = new RenderableComponent("r0", 0);
+    RenderableComponent r1 = new RenderableComponent("r1", 1);
     
     e.plug(r1);
     e.plug(r0);

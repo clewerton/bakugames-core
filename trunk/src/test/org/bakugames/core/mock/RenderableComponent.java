@@ -12,8 +12,10 @@ public class RenderableComponent extends Component implements Renderable {
   public int zOrder = 0;
   public long nanoTime = 0;
   
-  public RenderableComponent(String id) {
+  public RenderableComponent(String id, int zOrder) {
     super(id);
+    
+    this.zOrder = zOrder;
   }
   
   public RenderableComponent(String id, Entity owner) {

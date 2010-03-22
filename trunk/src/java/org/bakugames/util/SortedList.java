@@ -1,6 +1,7 @@
 package org.bakugames.util;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -12,10 +13,14 @@ public class SortedList<E extends Comparable<E>> implements List<E> {
     if(backingList == null)
       throw new IllegalArgumentException("null");
 
+    Collections.sort(backingList);
     this.backingList = backingList;
   }
 
   public boolean add(E e) {
+    if(e == null)
+      return false;
+    
     int index = binarySearch(backingList, e);
 
     if(index >= 0) // e is already in the list, don't put it again
@@ -31,9 +36,14 @@ public class SortedList<E extends Comparable<E>> implements List<E> {
   }
 
   public boolean addAll(Collection<? extends E> c) {
+    if(c == null)
+      return false;
+    
     boolean result = false;
-    for(E e : c)
-      result = result || add(e);
+    for(E e : c) {
+      boolean newResult = add(e);
+      result = result || newResult;
+    }
     
     return result;
   }

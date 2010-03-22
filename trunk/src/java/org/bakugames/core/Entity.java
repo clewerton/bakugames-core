@@ -100,10 +100,16 @@ public class Entity implements Renderable, Updateable {
   private List<Updateable> updateableComponents;
   
   public Entity() {
-    this(null);
+    this(null, 0);
   }
   
   public Entity(World world) {
+    this(world, 0);
+  }
+  
+  public Entity(World world, int zOrder) {
+    this.zOrder = zOrder;
+    
     setWorld0(world);
     
     renderableComponents = new SortedList(new ArrayList<Renderable>());
@@ -228,9 +234,5 @@ public class Entity implements Renderable, Updateable {
   @Override
   public int getZOrder() {
     return zOrder;
-  }
-
-  public void setZOrder(int zOrder) {
-    this.zOrder = zOrder;
   }
 }
