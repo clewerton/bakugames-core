@@ -14,12 +14,12 @@ import static util.TestUtils.assertEntityNotInWorld;
 
 import java.util.Map;
 
-import mock.RenderableAndUpdateableComponent;
-import mock.RenderableComponent;
-import mock.UpdateableComponent;
 
 import org.bakugames.core.exception.ComponentIdMismatchException;
 import org.bakugames.core.exception.IdConflictException;
+import org.bakugames.core.mock.RenderableAndUpdateableComponent;
+import org.bakugames.core.mock.RenderableComponent;
+import org.bakugames.core.mock.UpdateableComponent;
 import org.junit.Before;
 import org.junit.Test;
 
