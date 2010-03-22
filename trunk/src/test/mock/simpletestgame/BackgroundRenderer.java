@@ -25,4 +25,14 @@ public class BackgroundRenderer extends Component implements Renderable {
   public void render(GameContainer gc, StateBasedGame sb, Graphics gr) {
     image.draw(0, 0);
   }
+
+  @Override
+  public int getZOrder() {
+    return 0;
+  }
+  
+  @Override
+  public int compareTo(Renderable o) {
+    return getZOrder() - (o != null ? o.getZOrder() : 0);
+  }
 }

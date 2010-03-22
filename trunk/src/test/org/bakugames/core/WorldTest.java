@@ -12,9 +12,24 @@ import org.bakugames.core.mock.RenderableComponent;
 import org.bakugames.core.mock.UpdateableComponent;
 import org.junit.Before;
 import org.junit.Test;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.state.StateBasedGame;
 
 public class WorldTest {
   private World w;
+
+  private static class TimedEntity extends Entity {
+    public long nanoTime = 0;
+
+    public TimedEntity() { /* empty block */ }
+    
+    @Override
+    public void render(GameContainer gc, StateBasedGame sb, Graphics gr) {
+      super.render(gc, sb, gr);
+      nanoTime = System.nanoTime();
+    }
+  }
   
   @Before
   public void setUp() {
@@ -132,4 +147,23 @@ public class WorldTest {
     assertEquals(1, c.updateCount);
     assertEquals(1, u.updateCount);
   }
+  
+  @Test
+  public void zOrder() {
+    TimedEntity e0 = new TimedEntity();
+    e0.setZOrder(0);
+    
+    TimedEntity e1 = new TimedEntity();
+    e1.setZOrder(1);
+    
+    w.add(e1);
+    w.add(e0);
+    
+    assertEquals(0, e0.nanoTime);
+    assertEquals(0, e1.nanoTime);
+    
+    w.render(null, null, null);
+    
+    assertTrue(e0.nanoTime + ", " + e1.nanoTime, e0.nanoTime < e1.nanoTime);
+  } 
 }

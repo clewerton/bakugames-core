@@ -15,18 +15,20 @@ public class Body extends Component implements Renderable, Updateable {
   private float y;
   private float scale;
   private Image image;
+  private int zOrder;
   
-  public Body(Image image, float x, float y) {
-    this(null, image, x, y);
+  public Body(Image image, float x, float y, int zOrder) {
+    this(null, image, x, y, zOrder);
   }
 
-  public Body(Entity owner, Image image, float x, float y) {
+  public Body(Entity owner, Image image, float x, float y, int zOrder) {
     super("body", owner);
     
     this.image = image;
     this.x = x;
     this.y = y;
     this.scale = 1;
+    this.zOrder = zOrder;
   }
 
   // Slick methods
@@ -63,6 +65,19 @@ public class Body extends Component implements Renderable, Updateable {
     }
   }
 
+  // interface methods
+  @Override
+  public int compareTo(Renderable o) {
+    int thatZOrder = (o != null ? o.getZOrder() : 0);
+    int thisZOrder = getZOrder();
+    
+    return (thisZOrder < thatZOrder 
+         ? -1 
+         : (thisZOrder == thatZOrder 
+             ? 0 
+             : 1));
+  }
+  
   // properties
   public float getX() {
     return x;
@@ -94,5 +109,14 @@ public class Body extends Component implements Renderable, Updateable {
 
   public void setRotation(float rotation) {
     image.setRotation(rotation);
+  }
+
+  @Override
+  public int getZOrder() {
+    return zOrder;
+  }
+
+  public void setZOrder(int zOrder) {
+    this.zOrder = zOrder;
   }
 }
