@@ -4,6 +4,7 @@ import org.bakugames.core.Component;
 import org.bakugames.core.Entity;
 import org.bakugames.core.Renderable;
 import org.bakugames.core.Updateable;
+import org.bakugames.util.CompareUtils;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -68,14 +69,7 @@ public class Body extends Component implements Renderable, Updateable {
   // interface methods
   @Override
   public int compareTo(Renderable o) {
-    int thatZOrder = (o != null ? o.getZOrder() : 0);
-    int thisZOrder = getZOrder();
-    
-    return (thisZOrder < thatZOrder 
-         ? -1 
-         : (thisZOrder == thatZOrder 
-             ? 0 
-             : 1));
+    return CompareUtils.compareTo(this, o);
   }
   
   // properties

@@ -3,6 +3,7 @@ package mock.simpletestgame;
 import org.bakugames.core.Component;
 import org.bakugames.core.Entity;
 import org.bakugames.core.Renderable;
+import org.bakugames.util.CompareUtils;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -33,6 +34,6 @@ public class BackgroundRenderer extends Component implements Renderable {
   
   @Override
   public int compareTo(Renderable o) {
-    return getZOrder() - (o != null ? o.getZOrder() : 0);
+    return CompareUtils.compareTo(this, o);
   }
 }
