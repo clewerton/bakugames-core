@@ -5,8 +5,8 @@
 package mock.simpletestgame;
 
 import org.bakugames.core.Entity;
-import org.bakugames.core.Player;
 import org.bakugames.core.World;
+import org.bakugames.input.Player;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;

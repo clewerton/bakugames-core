@@ -1,64 +1,93 @@
 package mock.simpletestgame;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.bakugames.core.Entity;
 import org.bakugames.core.Instruction;
-import org.bakugames.core.Player;
-import org.bakugames.core.traits.Controllable;
+import org.bakugames.input.Control;
+import org.bakugames.input.Player;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class SinglePlayer implements Player {
   private Entity entity;
-  private Map<String, Instruction> commandMap;
+  private Map<Control, Instruction> inputMap;
   
   public SinglePlayer(Entity entity) {
     this.entity = entity;
    
-    Set<Instruction> instructionSet = entity.getInstructionSet();
+    inputMap = new HashMap<Control, Instruction>();
     
-    commandMap = new HashMap<String, Instruction>();
-    for(Instruction i : instructionSet)
-      commandMap.put(i.getName(), i);
+    init();
   }
 
+  private void init() {
+    Set<Instruction> instructionSet = entity.getInstructionSet();
+    
+    Map<String, Instruction> instructionMap = new HashMap<String, Instruction>();
+    for(Instruction i : instructionSet)
+      instructionMap.put(i.getName(), i);
+    
+    bind(new KeyDownControl(Input.KEY_A), instructionMap.get("turn left"));
+    bind(new KeyDownControl(Input.KEY_D), instructionMap.get("turn right"));
+    bind(new KeyDownControl(Input.KEY_W), instructionMap.get("run"));
+    bind(new KeyDownControl(Input.KEY_2), instructionMap.get("scale up"));
+    bind(new KeyDownControl(Input.KEY_1), instructionMap.get("scale down"));
+  }
+  
+  // operations
+  @Override
+  public void bind(Control control, Instruction instruction) {
+    if(control == null || instruction == null)
+      throw new IllegalArgumentException(control + ", " + instruction);
+    
+    inputMap.put(control, instruction);
+  }
+  
+  @Override
+  public void unbind(Control control) {
+    inputMap.remove(control);
+  }
+  
+  @Override
+  public void clear(Instruction instruction) {
+    if(instruction == null)
+      return;
+    
+    for(Control c : getControlsFor(instruction))
+      inputMap.remove(c);
+  }
+  
+  protected List<Control> getControlsFor(Instruction instruction) {
+    if(! inputMap.containsValue(instruction))
+      return Collections.EMPTY_LIST;
+    
+    List<Control> controls = new ArrayList<Control>();
+    for(Entry<Control, Instruction> entry : inputMap.entrySet())
+      if(instruction.equals(entry.getValue()))
+        controls.add(entry.getKey());
+    
+    return controls;
+  }
+  
   // input methods
   @Override
   public void update(GameContainer gc, StateBasedGame sb, int delta) {
     Input input = gc.getInput();
 
-    if(input.isKeyDown(Input.KEY_A))
-      controlPressed("turn left");
-    
-    if(input.isKeyDown(Input.KEY_D))
-      controlPressed("turn right");
-    
-    if(input.isKeyDown(Input.KEY_W))
-      controlPressed("run");
-
-    if(input.isKeyDown(Input.KEY_2))
-      controlPressed("scale up");
-    
-    if(input.isKeyDown(Input.KEY_1))
-      controlPressed("scale down");
-  }
-  
-  protected void controlPressed(String name) {
-    Instruction i = commandMap.get(name);
-    if(i == null)
-      return;
-    
-    entity.execute(i);
+    checkForInput(input);
   }
 
-  @Override
-  public List<? extends Controllable> getControlled() {
-    return Arrays.asList(entity);
+  protected void checkForInput(Input input) {
+    for(Control control : inputMap.keySet())
+      if(control.happened(input))
+        entity.execute(inputMap.get(control));
   }
 }
