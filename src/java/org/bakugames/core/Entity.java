@@ -2,8 +2,10 @@ package org.bakugames.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.bakugames.core.exception.ComponentIdMismatchException;
 import org.bakugames.core.exception.IdConflictException;
@@ -13,7 +15,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class Entity implements Renderable, Updateable {
+public class Entity implements Renderable, Updateable, Controllable {
   private static final class ComponentMap extends HashMap<String, Component> {
     private static final long serialVersionUID = 1L;
 
@@ -56,6 +58,9 @@ public class Entity implements Renderable, Updateable {
       if(c instanceof Updateable)
         entity.updateableComponents.add((Updateable) c);
       
+      if(c instanceof Controllable)
+        entity.controllableComponents.add((Controllable) c);
+      
       return c;
     }
 
@@ -77,6 +82,9 @@ public class Entity implements Renderable, Updateable {
       if(c instanceof Updateable)
         entity.updateableComponents.remove((Updateable) c);
      
+      if(c instanceof Controllable)
+        entity.controllableComponents.remove((Controllable) c);
+      
       c.setOwner(null);
       
       return c;
@@ -97,8 +105,9 @@ public class Entity implements Renderable, Updateable {
   
   // these two lists are backed by componentMap, so they won't be
   // accessed anywhere else but here 
-  private List<Renderable> renderableComponents; // TODO sort by z-order
+  private List<Renderable> renderableComponents; // sorted by z-order
   private List<Updateable> updateableComponents;
+  private List<Controllable> controllableComponents;
   
   public Entity() {
     this(null, 0);
@@ -119,6 +128,7 @@ public class Entity implements Renderable, Updateable {
     
     renderableComponents = new SortedList(new ArrayList<Renderable>());
     updateableComponents = new ArrayList<Updateable>();
+    controllableComponents = new ArrayList<Controllable>();
     
     componentMap = new ComponentMap(this);
   }
@@ -182,6 +192,24 @@ public class Entity implements Renderable, Updateable {
     return CompareUtils.compareTo(this, o);
   }
   
+  @Override
+  public boolean understands(Instruction instruction) {
+    if(instruction == null)
+      return false;
+    
+    return getInstructionSet().contains(instruction.getName());
+  }
+  
+  @Override
+  public Set<Instruction> getInstructionSet() {
+    Set<Instruction> instructionMap = new HashSet<Instruction>();
+    
+    for(Controllable c : controllableComponents)
+      instructionMap.addAll(c.getInstructionSet());
+      
+    return instructionMap;
+  }
+  
   // Slick operations
   @Override
   public void render(GameContainer gc, StateBasedGame sb, Graphics gr) {
@@ -191,6 +219,11 @@ public class Entity implements Renderable, Updateable {
   @Override
   public void update(GameContainer gc, StateBasedGame sb, int delta) {
     updateComponents(gc, sb, delta);
+  }
+
+  @Override
+  public void execute(Instruction instruction) {
+    orderComponents(instruction);
   }
 
   protected void renderComponents(GameContainer gc, StateBasedGame sb, Graphics gr) {
@@ -203,6 +236,11 @@ public class Entity implements Renderable, Updateable {
       u.update(gc, sb, delta);
   }
 
+  protected void orderComponents(Instruction instruction) {
+    for(Controllable c : controllableComponents)
+      c.execute(instruction);
+  }
+  
   // properties
   protected Map<String, Component> getComponentMap() {
     return componentMap;
