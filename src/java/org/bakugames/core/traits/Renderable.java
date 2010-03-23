@@ -1,4 +1,4 @@
-package org.bakugames.core;
+package org.bakugames.core.traits;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;

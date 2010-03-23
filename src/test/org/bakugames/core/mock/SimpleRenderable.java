@@ -1,6 +1,6 @@
 package org.bakugames.core.mock;
 
-import org.bakugames.core.Renderable;
+import org.bakugames.core.traits.Renderable;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.StateBasedGame;

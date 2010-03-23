@@ -9,6 +9,9 @@ import java.util.Set;
 
 import org.bakugames.core.exception.ComponentIdMismatchException;
 import org.bakugames.core.exception.IdConflictException;
+import org.bakugames.core.traits.Controllable;
+import org.bakugames.core.traits.Renderable;
+import org.bakugames.core.traits.Updateable;
 import org.bakugames.util.CompareUtils;
 import org.bakugames.util.SortedList;
 import org.newdawn.slick.GameContainer;
@@ -42,7 +45,7 @@ public class Entity implements Renderable, Updateable, Controllable {
         throw new ComponentIdMismatchException(key, c.getId());
       
       Component cPrime = get(key);
-      if(cPrime == c)
+      if(c.equals(cPrime))
         return c;
       
       if(cPrime != null)

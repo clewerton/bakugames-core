@@ -1,12 +1,16 @@
 package org.bakugames.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.bakugames.core.Renderable;
 import org.bakugames.core.mock.SimpleRenderable;
+import org.bakugames.core.traits.Renderable;
 import org.junit.Before;
 import org.junit.Test;
 

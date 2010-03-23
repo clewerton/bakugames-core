@@ -43,7 +43,7 @@ public class SlickBasicGame extends BasicGameState {
     land = new Entity(world, 0);
     land.plug(new BackgroundRenderer(new Image("src/test/mock/simpletestgame/land.jpg")));
     
-    player = new BasicPlayer(plane);
+    player = new SinglePlayer(plane);
   }
 
   @Override

@@ -1,30 +1,29 @@
 package mock.simpletestgame;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.bakugames.core.Entity;
 import org.bakugames.core.Instruction;
 import org.bakugames.core.Player;
+import org.bakugames.core.traits.Controllable;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class BasicPlayer extends Player {
+public class SinglePlayer implements Player {
   private Entity entity;
   private Map<String, Instruction> commandMap;
   
-  public BasicPlayer(Entity entity) {
-    super(entity);
-    
-    commandMap = new HashMap<String, Instruction>();
-    populateCommandMap();
-  }
-
-  private void populateCommandMap() {
+  public SinglePlayer(Entity entity) {
+    this.entity = entity;
+   
     Set<Instruction> instructionSet = entity.getInstructionSet();
     
+    commandMap = new HashMap<String, Instruction>();
     for(Instruction i : instructionSet)
       commandMap.put(i.getName(), i);
   }
@@ -58,11 +57,8 @@ public class BasicPlayer extends Player {
     entity.execute(i);
   }
 
-  public Entity getEntity() {
-    return entity;
-  }
-
-  public void setEntity(Entity entity) {
-    this.entity = entity;
+  @Override
+  public List<? extends Controllable> getControlled() {
+    return Arrays.asList(entity);
   }
 }
