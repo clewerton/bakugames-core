@@ -3,6 +3,8 @@ package org.bakugames.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bakugames.core.traits.Renderable;
+import org.bakugames.core.traits.Updateable;
 import org.bakugames.util.CompareUtils;
 import org.bakugames.util.SortedList;
 import org.newdawn.slick.GameContainer;

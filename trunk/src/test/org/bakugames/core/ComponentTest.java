@@ -10,9 +10,9 @@ import static util.TestUtils.assertComponentPluggedIn;
 
 import org.bakugames.core.Component;
 import org.bakugames.core.Entity;
-import org.bakugames.core.Renderable;
 import org.bakugames.core.exception.IdConflictException;
 import org.bakugames.core.mock.RenderableAndUpdateableComponent;
+import org.bakugames.core.traits.Renderable;
 import org.junit.Before;
 import org.junit.Test;
 

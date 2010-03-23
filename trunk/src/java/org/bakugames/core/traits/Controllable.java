@@ -1,8 +1,10 @@
-package org.bakugames.core;
+package org.bakugames.core.traits;
 
 import java.util.Set;
 
-public interface Controllable {
+import org.bakugames.core.Instruction;
+
+public interface Controllable extends Updateable {
   void execute(Instruction instruction);
   boolean understands(Instruction instruction);
   

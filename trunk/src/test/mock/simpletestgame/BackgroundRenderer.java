@@ -2,7 +2,7 @@ package mock.simpletestgame;
 
 import org.bakugames.core.Component;
 import org.bakugames.core.Entity;
-import org.bakugames.core.Renderable;
+import org.bakugames.core.traits.Renderable;
 import org.bakugames.util.CompareUtils;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;

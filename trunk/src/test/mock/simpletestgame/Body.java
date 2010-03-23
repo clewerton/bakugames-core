@@ -7,11 +7,11 @@ import java.util.Queue;
 import java.util.Set;
 
 import org.bakugames.core.Component;
-import org.bakugames.core.Controllable;
 import org.bakugames.core.Entity;
 import org.bakugames.core.Instruction;
-import org.bakugames.core.Renderable;
-import org.bakugames.core.Updateable;
+import org.bakugames.core.traits.Controllable;
+import org.bakugames.core.traits.Renderable;
+import org.bakugames.core.traits.Updateable;
 import org.bakugames.util.CompareUtils;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -26,7 +26,12 @@ public class Body extends Component implements Renderable, Updateable, Controlla
   private int zOrder;
   private Set<Instruction> instructionSet;
   private Queue<Instruction> instructionQueue;
-  
+  private Instruction scaleDown;
+  private Instruction scaleUp;
+  private Instruction run;
+  private Instruction turnRight;
+  private Instruction turnLeft;
+    
   public Body(Image image, float x, float y, int zOrder) {
     this(null, image, x, y, zOrder);
   }
@@ -46,7 +51,7 @@ public class Body extends Component implements Renderable, Updateable, Controlla
   }
 
   private void registerInstructions() {
-    registerInstruction(new Instruction() {
+    turnLeft = new Instruction() {
       @Override
       public String getName() {
         return "turn left";
@@ -56,9 +61,9 @@ public class Body extends Component implements Renderable, Updateable, Controlla
       public void execute(Component c, GameContainer gc, StateBasedGame sb, int delta) {
         image.rotate(- 0.2f * delta);
       }
-    });
+    };
     
-    registerInstruction(new Instruction() {
+    turnRight = new Instruction() {
       @Override
       public String getName() {
         return "turn right";
@@ -68,9 +73,9 @@ public class Body extends Component implements Renderable, Updateable, Controlla
       public void execute(Component c, GameContainer gc, StateBasedGame sb, int delta) {
         image.rotate(0.2f * delta);
       }
-    });
+    };
     
-    registerInstruction(new Instruction() {
+    run = new Instruction() {
       @Override
       public String getName() {
         return "run";
@@ -83,9 +88,9 @@ public class Body extends Component implements Renderable, Updateable, Controlla
         x += hip * Math.sin(Math.toRadians(image.getRotation()));
         y -= hip * Math.cos(Math.toRadians(image.getRotation()));
       }
-    });
+    };
     
-    registerInstruction(new Instruction() {
+    scaleUp = new Instruction() {
       @Override
       public String getName() {
         return "scale up";
@@ -96,9 +101,9 @@ public class Body extends Component implements Renderable, Updateable, Controlla
         scale += (scale >= 5.0f) ? 0 : 0.1f;
         image.setCenterOfRotation(image.getWidth() / 2.0f * scale, image.getHeight() / 2.0f * scale);
       }
-    });
+    };
     
-    registerInstruction(new Instruction() {
+    scaleDown = new Instruction() {
       @Override
       public String getName() {
         return "scale down";
@@ -109,7 +114,13 @@ public class Body extends Component implements Renderable, Updateable, Controlla
         scale -= (scale <= 1.0f) ? 0 : 0.1f;
         image.setCenterOfRotation(image.getWidth() / 2.0f * scale, image.getHeight() / 2.0f * scale);
       }
-    });
+    };
+    
+    registerInstruction(turnLeft);
+    registerInstruction(turnRight);
+    registerInstruction(run);
+    registerInstruction(scaleUp);
+    registerInstruction(scaleDown);
   }
 
   // Slick methods
@@ -151,7 +162,7 @@ public class Body extends Component implements Renderable, Updateable, Controlla
     return instructionSet.contains(instruction);
   }
   
-  protected void registerInstruction(Instruction instruction) {
+  protected final void registerInstruction(Instruction instruction) {
     if(instruction == null)
       return;
     

@@ -2,7 +2,7 @@ package org.bakugames.core.mock;
 
 import org.bakugames.core.Component;
 import org.bakugames.core.Entity;
-import org.bakugames.core.Updateable;
+import org.bakugames.core.traits.Updateable;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.state.StateBasedGame;
 

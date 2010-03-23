@@ -47,7 +47,7 @@ public class Component {
       owner.plug(this);
   }
   
-  public String getId() {
+  public final String getId() {
     return id;
   }
   

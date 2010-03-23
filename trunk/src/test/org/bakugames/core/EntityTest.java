@@ -20,6 +20,7 @@ import org.bakugames.core.exception.IdConflictException;
 import org.bakugames.core.mock.RenderableAndUpdateableComponent;
 import org.bakugames.core.mock.RenderableComponent;
 import org.bakugames.core.mock.UpdateableComponent;
+import org.bakugames.core.traits.Renderable;
 import org.junit.Before;
 import org.junit.Test;
 
