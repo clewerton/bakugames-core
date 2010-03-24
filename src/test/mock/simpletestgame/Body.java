@@ -1,8 +1,9 @@
 package mock.simpletestgame;
 
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
@@ -24,13 +25,8 @@ public class Body extends Component implements Renderable, Updateable, Controlla
   private float scale;
   private Image image;
   private int zOrder;
-  private Set<Instruction> instructionSet;
   private Queue<Instruction> instructionQueue;
-  private Instruction scaleDown;
-  private Instruction scaleUp;
-  private Instruction run;
-  private Instruction turnRight;
-  private Instruction turnLeft;
+  private Map<String, Instruction> instructionMap;
     
   public Body(Image image, float x, float y, int zOrder) {
     this(null, image, x, y, zOrder);
@@ -46,81 +42,60 @@ public class Body extends Component implements Renderable, Updateable, Controlla
     this.zOrder = zOrder;
     
     instructionQueue = new LinkedList<Instruction>();
-    instructionSet = new HashSet<Instruction>();
+    instructionMap = new HashMap<String, Instruction>();
     registerInstructions();
   }
 
   private void registerInstructions() {
-    turnLeft = new Instruction() {
-      @Override
-      public String getName() {
-        return "turn left";
-      }
-      
-      @Override
-      public void execute(Component c, GameContainer gc, StateBasedGame sb, int delta) {
-        image.rotate(- 0.2f * delta);
-      }
-    };
+    instructionMap.put(
+        "turn left", 
+        new Instruction() {
+          @Override
+          public void execute(Component c, GameContainer gc, StateBasedGame sb, int delta) {
+            image.rotate(- 0.2f * delta);
+          }
+        });
     
-    turnRight = new Instruction() {
-      @Override
-      public String getName() {
-        return "turn right";
-      }
-      
-      @Override
-      public void execute(Component c, GameContainer gc, StateBasedGame sb, int delta) {
-        image.rotate(0.2f * delta);
-      }
-    };
+    instructionMap.put(
+        "turn right",
+        new Instruction() {
+          @Override
+          public void execute(Component c, GameContainer gc, StateBasedGame sb, int delta) {
+            image.rotate(0.2f * delta);
+          }
+        });
     
-    run = new Instruction() {
-      @Override
-      public String getName() {
-        return "run";
-      }
-      
-      @Override
-      public void execute(Component c, GameContainer gc, StateBasedGame sb, int delta) {
-        float hip = 0.4f * delta;
-
-        x += hip * Math.sin(Math.toRadians(image.getRotation()));
-        y -= hip * Math.cos(Math.toRadians(image.getRotation()));
-      }
-    };
+    instructionMap.put(
+        "run",
+        new Instruction() {
+          @Override
+          public void execute(Component c, GameContainer gc, StateBasedGame sb, int delta) {
+            float hip = 0.4f * delta;
     
-    scaleUp = new Instruction() {
-      @Override
-      public String getName() {
-        return "scale up";
-      }
-      
-      @Override
-      public void execute(Component c, GameContainer gc, StateBasedGame sb, int delta) {
-        scale += (scale >= 5.0f) ? 0 : 0.1f;
-        image.setCenterOfRotation(image.getWidth() / 2.0f * scale, image.getHeight() / 2.0f * scale);
-      }
-    };
+            x += hip * Math.sin(Math.toRadians(image.getRotation()));
+            y -= hip * Math.cos(Math.toRadians(image.getRotation()));
+          }
+        });
     
-    scaleDown = new Instruction() {
-      @Override
-      public String getName() {
-        return "scale down";
-      }
-      
-      @Override
-      public void execute(Component c, GameContainer gc, StateBasedGame sb, int delta) {
-        scale -= (scale <= 1.0f) ? 0 : 0.1f;
-        image.setCenterOfRotation(image.getWidth() / 2.0f * scale, image.getHeight() / 2.0f * scale);
-      }
-    };
+    instructionMap.put(
+        "scale up",
+        new Instruction() {
+          @Override
+          public void execute(Component c, GameContainer gc, StateBasedGame sb, int delta) {
+            scale += (scale >= 5.0f) ? 0 : 0.1f;
+            image.setCenterOfRotation(image.getWidth() / 2.0f * scale, image.getHeight() / 2.0f * scale);
+          }
+        });
     
-    registerInstruction(turnLeft);
-    registerInstruction(turnRight);
-    registerInstruction(run);
-    registerInstruction(scaleUp);
-    registerInstruction(scaleDown);
+    instructionMap.put(
+        "scale down",
+        new Instruction() {
+          @Override
+          public void execute(Component c, GameContainer gc, StateBasedGame sb, int delta) {
+            scale -= (scale <= 1.0f) ? 0 : 0.1f;
+            image.setCenterOfRotation(image.getWidth() / 2.0f * scale, image.getHeight() / 2.0f * scale);
+          }
+        });
   }
 
   // Slick methods
@@ -142,31 +117,24 @@ public class Body extends Component implements Renderable, Updateable, Controlla
   }
   
   @Override
-  public Set<Instruction> getInstructionSet() {
-    return Collections.unmodifiableSet(instructionSet);
+  public Set<String> getInstructionSet() {
+    return Collections.unmodifiableSet(instructionMap.keySet());
   }
 
   @Override
-  public void execute(Instruction instruction) {
+  public void execute(String instruction) {
     if(! understands(instruction))
       return;
     
-    instructionQueue.add(instruction);
+    instructionQueue.add(instructionMap.get(instruction));
   }
 
   @Override
-  public boolean understands(Instruction instruction) {
+  public boolean understands(String instruction) {
     if(instruction == null)
       return false;
     
-    return instructionSet.contains(instruction);
-  }
-  
-  protected final void registerInstruction(Instruction instruction) {
-    if(instruction == null)
-      return;
-    
-    instructionSet.add(instruction);
+    return instructionMap.containsKey(instruction);
   }
   
   // properties
