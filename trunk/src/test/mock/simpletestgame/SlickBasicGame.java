@@ -6,7 +6,7 @@ package mock.simpletestgame;
 
 import org.bakugames.core.Entity;
 import org.bakugames.core.World;
-import org.bakugames.input.Player;
+import org.bakugames.input.InputBasedPlayer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -20,7 +20,7 @@ public class SlickBasicGame extends BasicGameState {
   private Entity land;
   
   private World world;
-  private Player player;
+  private InputBasedPlayer inputBasedPlayer;
   
   private int id;
   
@@ -43,7 +43,7 @@ public class SlickBasicGame extends BasicGameState {
     land = new Entity(world, 0);
     land.plug(new BackgroundRenderer(new Image("src/test/mock/simpletestgame/land.jpg")));
     
-    player = new SinglePlayer(plane);
+    inputBasedPlayer = new SinglePlayer(plane);
   }
 
   @Override
@@ -54,7 +54,7 @@ public class SlickBasicGame extends BasicGameState {
       System.exit(0);
     
     world.update(gc, sbg, delta);
-    player.update(gc, sbg, delta);
+    inputBasedPlayer.update(gc, sbg, delta);
   }
 
   @Override

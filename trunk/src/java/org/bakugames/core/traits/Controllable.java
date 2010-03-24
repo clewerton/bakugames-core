@@ -2,11 +2,9 @@ package org.bakugames.core.traits;
 
 import java.util.Set;
 
-import org.bakugames.core.Instruction;
-
 public interface Controllable extends Updateable {
-  void execute(Instruction instruction);
-  boolean understands(Instruction instruction);
+  void execute(String instruction);
+  boolean understands(String instruction);
   
-  Set<Instruction> getInstructionSet();
+  Set<String> getInstructionSet();
 }

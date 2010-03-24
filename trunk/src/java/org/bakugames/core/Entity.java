@@ -196,21 +196,21 @@ public class Entity implements Renderable, Updateable, Controllable {
   }
   
   @Override
-  public boolean understands(Instruction instruction) {
+  public boolean understands(String instruction) {
     if(instruction == null)
       return false;
     
-    return getInstructionSet().contains(instruction.getName());
+    return getInstructionSet().contains(instruction);
   }
   
   @Override
-  public Set<Instruction> getInstructionSet() {
-    Set<Instruction> instructionMap = new HashSet<Instruction>();
+  public Set<String> getInstructionSet() {
+    Set<String> instructionSet = new HashSet<String>();
     
     for(Controllable c : controllableComponents)
-      instructionMap.addAll(c.getInstructionSet());
+      instructionSet.addAll(c.getInstructionSet());
       
-    return instructionMap;
+    return instructionSet;
   }
   
   // Slick operations
@@ -225,7 +225,7 @@ public class Entity implements Renderable, Updateable, Controllable {
   }
 
   @Override
-  public void execute(Instruction instruction) {
+  public void execute(String instruction) {
     orderComponents(instruction);
   }
 
@@ -239,7 +239,7 @@ public class Entity implements Renderable, Updateable, Controllable {
       u.update(gc, sb, delta);
   }
 
-  protected void orderComponents(Instruction instruction) {
+  protected void orderComponents(String instruction) {
     for(Controllable c : controllableComponents)
       c.execute(instruction);
   }
