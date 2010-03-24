@@ -1,5 +1,6 @@
 package org.bakugames.core;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -12,11 +13,12 @@ import static util.TestUtils.assertComponentPluggedIn;
 import static util.TestUtils.assertEntityInWorld;
 import static util.TestUtils.assertEntityNotInWorld;
 
+import java.util.Arrays;
 import java.util.Map;
-
 
 import org.bakugames.core.exception.ComponentIdMismatchException;
 import org.bakugames.core.exception.IdConflictException;
+import org.bakugames.core.mock.ControllableComponent;
 import org.bakugames.core.mock.RenderableAndUpdateableComponent;
 import org.bakugames.core.mock.RenderableComponent;
 import org.bakugames.core.mock.UpdateableComponent;
@@ -278,31 +280,35 @@ public class EntityTest {
   
   @Test
   public void renderAndUpdate() {
-    RenderableAndUpdateableComponent c = new RenderableAndUpdateableComponent("id", e);
+    RenderableAndUpdateableComponent ru = new RenderableAndUpdateableComponent("ru", e);
     RenderableComponent r = new RenderableComponent("r", e);
     UpdateableComponent u = new UpdateableComponent("u", e);
+    ControllableComponent c = new ControllableComponent("c", e, "a");
     
-    assertEquals(0, c.renderCount);
+    assertEquals(0, ru.renderCount);
     assertEquals(0, r.renderCount);
     
-    assertEquals(0, c.updateCount);
+    assertEquals(0, ru.updateCount);
     assertEquals(0, u.updateCount);
+    assertEquals(0, c.updateCount);
     
     e.render(null, null, null);
     
-    assertEquals(1, c.renderCount);
+    assertEquals(1, ru.renderCount);
     assertEquals(1, r.renderCount);
     
-    assertEquals(0, c.updateCount);
+    assertEquals(0, ru.updateCount);
     assertEquals(0, u.updateCount);
+    assertEquals(0, c.updateCount);
     
     e.update(null, null, 0);
     
-    assertEquals(1, c.renderCount);
+    assertEquals(1, ru.renderCount);
     assertEquals(1, r.renderCount);
     
-    assertEquals(1, c.updateCount);
+    assertEquals(1, ru.updateCount);
     assertEquals(1, u.updateCount);
+    assertEquals(1, c.updateCount);
   }
   
   @Test
@@ -337,5 +343,61 @@ public class EntityTest {
     e.render(null, null, null);
     
     assertTrue(r0.nanoTime + ", " + r1.nanoTime, r0.nanoTime < r1.nanoTime);
+  }
+  
+  @Test
+  public void execute() {
+    ControllableComponent c = new ControllableComponent("c", e, "a", "b", "c");
+    
+    assertEquals(0, c.instructionsExecuted.size());
+    
+    // checking via the entity
+    assertEquals(3, e.getInstructionSet().size());
+    assertTrue(e.getInstructionSet().containsAll(Arrays.asList("a", "b", "c")));
+    
+    e.execute("a");
+    
+    assertEquals(1, c.instructionsExecuted.size());
+    assertEquals("a", c.instructionsExecuted.get(0));
+    
+    e.execute("c");
+    e.execute("b");
+    
+    assertArrayEquals(new Object[] { "a", "c", "b" }, c.instructionsExecuted.toArray());
+  }
+  
+  @Test
+  public void understands() {
+    e.plug(new ControllableComponent("c", "a", "b", "c"));
+    
+    assertTrue(e.understands("a"));
+    assertTrue(e.understands("b"));
+    assertTrue(e.understands("c"));
+    assertFalse(e.understands("d"));
+    assertFalse(e.understands(""));
+    assertFalse(e.understands(null));
+  }
+  
+  @Test
+  public void multipleControllables() {
+    ControllableComponent c1 = new ControllableComponent("c1", e, "a", "b", "c");
+    ControllableComponent c2 = new ControllableComponent("c2", e, "d", "e", "f");
+    
+    assertEquals(6, e.getInstructionSet().size());
+    assertTrue(e.getInstructionSet().containsAll(Arrays.asList("a", "b", "c", "d", "e", "f")));
+    
+    assertTrue(c1.instructionsExecuted.isEmpty());
+    assertTrue(c2.instructionsExecuted.isEmpty());
+    
+    e.execute("a");
+    
+    assertArrayEquals(new Object[] { "a" }, c1.instructionsExecuted.toArray());
+    assertTrue(c2.instructionsExecuted.isEmpty());
+    
+    e.execute("f");
+    e.execute("b");
+    
+    assertArrayEquals(new Object[] { "a", "b" }, c1.instructionsExecuted.toArray());
+    assertArrayEquals(new Object[] { "f" }, c2.instructionsExecuted.toArray());
   }
 }
