@@ -364,6 +364,13 @@ public class EntityTest {
     e.execute("b");
     
     assertArrayEquals(new Object[] { "a", "c", "b" }, c.instructionsExecuted.toArray());
+    
+    assertSame(c, e.unplug(c.getId()));
+    
+    e.execute("b");
+    
+    // the instruction didn't make it to c
+    assertArrayEquals(new Object[] { "a", "c", "b" }, c.instructionsExecuted.toArray());
   }
   
   @Test

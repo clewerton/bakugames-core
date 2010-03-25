@@ -22,27 +22,7 @@ public class World implements Renderable, Updateable {
     }
 
     @Override
-    public boolean add(Entity e) {
-      if(e == null)
-        return false;
-      
-      if(contains(e))
-        return false;
-      
-      super.add(e);
-      e.setWorld(world);
-      
-      return true;
-    }
-    
-    @Override
     public void add(int index, Entity e) {
-      if(e == null)
-        return;
-      
-      if(contains(e))
-        return;
-      
       super.add(index, e);
       e.setWorld(world);
     }
