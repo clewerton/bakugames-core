@@ -1,4 +1,4 @@
-package org.bakugames.core;
+package org.bakugames.core.input;
 
 import org.bakugames.core.traits.Updateable;
 

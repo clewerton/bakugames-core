@@ -9,7 +9,7 @@ import java.util.Set;
 
 import org.bakugames.core.Component;
 import org.bakugames.core.Entity;
-import org.bakugames.core.Instruction;
+import org.bakugames.core.input.Instruction;
 import org.bakugames.core.traits.Controllable;
 import org.bakugames.core.traits.Renderable;
 import org.bakugames.core.traits.Updateable;

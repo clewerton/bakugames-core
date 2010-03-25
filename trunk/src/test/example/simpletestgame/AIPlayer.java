@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bakugames.core.Entity;
-import org.bakugames.core.Player;
+import org.bakugames.core.input.Player;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.state.StateBasedGame;
 
