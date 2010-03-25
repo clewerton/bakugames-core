@@ -1,4 +1,4 @@
-package org.bakugames.input;
+package org.bakugames.core.input;
 
 import org.newdawn.slick.Input;
 

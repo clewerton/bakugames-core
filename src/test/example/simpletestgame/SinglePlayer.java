@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bakugames.core.Entity;
-import org.bakugames.input.Control;
-import org.bakugames.input.InputBasedPlayer;
+import org.bakugames.core.input.Control;
+import org.bakugames.core.input.InputBasedPlayer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;

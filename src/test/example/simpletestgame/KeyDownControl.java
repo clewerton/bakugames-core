@@ -1,6 +1,6 @@
 package example.simpletestgame;
 
-import org.bakugames.input.Control;
+import org.bakugames.core.input.Control;
 import org.newdawn.slick.Input;
 
 public class KeyDownControl implements Control {
