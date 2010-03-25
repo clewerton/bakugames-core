@@ -1,6 +1,5 @@
 package org.bakugames.core.input;
 
-import org.bakugames.core.Player;
 
 
 public interface InputBasedPlayer extends Player {
