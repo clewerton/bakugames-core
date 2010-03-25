@@ -400,4 +400,32 @@ public class EntityTest {
     assertArrayEquals(new Object[] { "a", "b" }, c1.instructionsExecuted.toArray());
     assertArrayEquals(new Object[] { "f" }, c2.instructionsExecuted.toArray());
   }
+  
+  @Test
+  public void overlappingInstructionSets() {
+    ControllableComponent c1 = new ControllableComponent("c1", e, "a", "b", "c");
+    ControllableComponent c2 = new ControllableComponent("c2", e, "b", "c", "d");
+    
+    assertEquals(4, e.getInstructionSet().size());
+    assertTrue(e.getInstructionSet().containsAll(Arrays.asList("a", "b", "c", "d")));
+    
+    assertTrue(c1.instructionsExecuted.isEmpty());
+    assertTrue(c2.instructionsExecuted.isEmpty());
+    
+    e.execute("a");
+    
+    assertArrayEquals(new Object[] { "a" }, c1.instructionsExecuted.toArray());
+    assertTrue(c2.instructionsExecuted.isEmpty());
+    
+    e.execute("d");
+    
+    assertArrayEquals(new Object[] { "a" }, c1.instructionsExecuted.toArray());
+    assertArrayEquals(new Object[] { "d" }, c2.instructionsExecuted.toArray());
+    
+    e.execute("c");
+    e.execute("b");
+    
+    assertArrayEquals(new Object[] { "a", "c", "b" }, c1.instructionsExecuted.toArray());
+    assertArrayEquals(new Object[] { "d", "c", "b" }, c2.instructionsExecuted.toArray());
+  }
 }
