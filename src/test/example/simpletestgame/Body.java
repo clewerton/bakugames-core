@@ -51,7 +51,7 @@ public class Body extends Component implements Renderable, Updateable, Controlla
         "turn left", 
         new Instruction() {
           @Override
-          public void execute(Component c, GameContainer gc, StateBasedGame sb, int delta) {
+          public void execute(GameContainer gc, StateBasedGame sb, int delta) {
             image.rotate(- 0.2f * delta);
           }
         });
@@ -60,7 +60,7 @@ public class Body extends Component implements Renderable, Updateable, Controlla
         "turn right",
         new Instruction() {
           @Override
-          public void execute(Component c, GameContainer gc, StateBasedGame sb, int delta) {
+          public void execute(GameContainer gc, StateBasedGame sb, int delta) {
             image.rotate(0.2f * delta);
           }
         });
@@ -69,7 +69,7 @@ public class Body extends Component implements Renderable, Updateable, Controlla
         "run",
         new Instruction() {
           @Override
-          public void execute(Component c, GameContainer gc, StateBasedGame sb, int delta) {
+          public void execute(GameContainer gc, StateBasedGame sb, int delta) {
             float hip = 0.4f * delta;
     
             x += hip * Math.sin(Math.toRadians(image.getRotation()));
@@ -81,7 +81,7 @@ public class Body extends Component implements Renderable, Updateable, Controlla
         "scale up",
         new Instruction() {
           @Override
-          public void execute(Component c, GameContainer gc, StateBasedGame sb, int delta) {
+          public void execute(GameContainer gc, StateBasedGame sb, int delta) {
             scale += (scale >= 5.0f) ? 0 : 0.1f;
             image.setCenterOfRotation(image.getWidth() / 2.0f * scale, image.getHeight() / 2.0f * scale);
           }
@@ -91,7 +91,7 @@ public class Body extends Component implements Renderable, Updateable, Controlla
         "scale down",
         new Instruction() {
           @Override
-          public void execute(Component c, GameContainer gc, StateBasedGame sb, int delta) {
+          public void execute(GameContainer gc, StateBasedGame sb, int delta) {
             scale -= (scale <= 1.0f) ? 0 : 0.1f;
             image.setCenterOfRotation(image.getWidth() / 2.0f * scale, image.getHeight() / 2.0f * scale);
           }
@@ -107,7 +107,7 @@ public class Body extends Component implements Renderable, Updateable, Controlla
   @Override
   public void update(GameContainer gc, StateBasedGame sb, int delta) {
     while(! instructionQueue.isEmpty())
-      instructionQueue.poll().execute(this, gc, sb, delta);
+      instructionQueue.poll().execute(gc, sb, delta);
   }
 
   // interface methods

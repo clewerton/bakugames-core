@@ -1,9 +1,9 @@
 package org.bakugames.core.input;
 
-import org.bakugames.core.Component;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.state.StateBasedGame;
 
 public interface Instruction {
-  void execute(Component c, GameContainer gc, StateBasedGame sb, int delta);
+  // TODO has the same argument list as Updateable.update. Merge the two?
+  void execute(GameContainer gc, StateBasedGame sb, int delta);
 }
