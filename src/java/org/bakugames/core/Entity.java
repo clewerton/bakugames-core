@@ -196,7 +196,7 @@ public class Entity implements Renderable, Updateable, Controllable {
   }
   
   @Override
-  public boolean understands(String instruction) {
+  public boolean understands(Object instruction) {
     if(instruction == null)
       return false;
     
@@ -204,8 +204,8 @@ public class Entity implements Renderable, Updateable, Controllable {
   }
   
   @Override
-  public Set<String> getInstructionSet() {
-    Set<String> instructionSet = new HashSet<String>();
+  public Set<Object> getInstructionSet() {
+    Set<Object> instructionSet = new HashSet<Object>();
     
     for(Controllable c : controllableComponents)
       instructionSet.addAll(c.getInstructionSet());
@@ -225,7 +225,7 @@ public class Entity implements Renderable, Updateable, Controllable {
   }
 
   @Override
-  public void execute(String instruction) {
+  public void execute(Object instruction) {
     orderComponents(instruction);
   }
 
@@ -239,7 +239,7 @@ public class Entity implements Renderable, Updateable, Controllable {
       u.update(gc, sb, delta);
   }
 
-  protected void orderComponents(String instruction) {
+  protected void orderComponents(Object instruction) {
     for(Controllable c : controllableComponents)
       c.execute(instruction);
   }

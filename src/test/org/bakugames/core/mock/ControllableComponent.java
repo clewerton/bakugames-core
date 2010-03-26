@@ -12,8 +12,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class ControllableComponent extends Component implements Controllable {
-  public Set<String> instructionSet;
-  public List<String> instructionsExecuted;
+  public Set<Object> instructionSet;
+  public List<Object> instructionsExecuted;
   public int updateCount;
   
   public ControllableComponent(String id, String... instructions) {
@@ -23,8 +23,8 @@ public class ControllableComponent extends Component implements Controllable {
   public ControllableComponent(String id, Entity owner, String... instructions) {
     super(id, owner);
     
-    instructionSet = new HashSet<String>();
-    instructionsExecuted = new ArrayList<String>();
+    instructionSet = new HashSet<Object>();
+    instructionsExecuted = new ArrayList<Object>();
     updateCount = 0;
     
     for(String instruction : instructions)
@@ -32,7 +32,7 @@ public class ControllableComponent extends Component implements Controllable {
   }
 
   @Override
-  public void execute(String instruction) {
+  public void execute(Object instruction) {
     if(! understands(instruction))
       return;
     
@@ -40,12 +40,12 @@ public class ControllableComponent extends Component implements Controllable {
   }
 
   @Override
-  public Set<String> getInstructionSet() {
+  public Set<Object> getInstructionSet() {
     return instructionSet;
   }
 
   @Override
-  public boolean understands(String instruction) {
+  public boolean understands(Object instruction) {
     return instructionSet.contains(instruction);
   }
 
