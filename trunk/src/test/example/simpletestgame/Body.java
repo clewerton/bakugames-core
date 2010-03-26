@@ -26,7 +26,7 @@ public class Body extends Component implements Renderable, Updateable, Controlla
   private Image image;
   private int zOrder;
   private Queue<Instruction> instructionQueue;
-  private Map<String, Instruction> instructionMap;
+  private Map<Object, Instruction> instructionMap;
     
   public Body(Image image, float x, float y, int zOrder) {
     this(null, image, x, y, zOrder);
@@ -42,7 +42,7 @@ public class Body extends Component implements Renderable, Updateable, Controlla
     this.zOrder = zOrder;
     
     instructionQueue = new LinkedList<Instruction>();
-    instructionMap = new HashMap<String, Instruction>();
+    instructionMap = new HashMap<Object, Instruction>();
     registerInstructions();
   }
 
@@ -117,12 +117,12 @@ public class Body extends Component implements Renderable, Updateable, Controlla
   }
   
   @Override
-  public Set<String> getInstructionSet() {
+  public Set<Object> getInstructionSet() {
     return Collections.unmodifiableSet(instructionMap.keySet());
   }
 
   @Override
-  public void execute(String instruction) {
+  public void execute(Object instruction) {
     if(! understands(instruction))
       return;
     
@@ -130,7 +130,7 @@ public class Body extends Component implements Renderable, Updateable, Controlla
   }
 
   @Override
-  public boolean understands(String instruction) {
+  public boolean understands(Object instruction) {
     if(instruction == null)
       return false;
     
