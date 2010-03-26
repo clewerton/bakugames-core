@@ -11,16 +11,16 @@ import org.bakugames.core.traits.Controllable;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class ControllableComponent extends Component implements Controllable {
+public class GenericControllableComponent extends Component implements Controllable {
   public Set<Object> instructionSet;
   public List<Object> instructionsExecuted;
   public int updateCount;
   
-  public ControllableComponent(String id, String... instructions) {
+  public GenericControllableComponent(String id, String... instructions) {
     this(id, null, instructions);
   }
 
-  public ControllableComponent(String id, Entity owner, String... instructions) {
+  public GenericControllableComponent(String id, Entity owner, String... instructions) {
     super(id, owner);
     
     instructionSet = new HashSet<Object>();

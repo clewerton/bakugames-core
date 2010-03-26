@@ -1,16 +1,8 @@
 package example.simpletestgame;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-
-import org.bakugames.core.Component;
 import org.bakugames.core.Entity;
 import org.bakugames.core.input.Instruction;
-import org.bakugames.core.traits.Controllable;
+import org.bakugames.core.traits.AbstractControllableComponent;
 import org.bakugames.core.traits.Renderable;
 import org.bakugames.core.traits.Updateable;
 import org.bakugames.util.CompareUtils;
@@ -19,15 +11,13 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class Body extends Component implements Renderable, Updateable, Controllable {
+public class Body extends AbstractControllableComponent implements Renderable, Updateable {
   private float x;
   private float y;
   private float scale;
   private Image image;
   private int zOrder;
-  private Queue<Instruction> instructionQueue;
-  private Map<Object, Instruction> instructionMap;
-    
+  
   public Body(Image image, float x, float y, int zOrder) {
     this(null, image, x, y, zOrder);
   }
@@ -41,14 +31,11 @@ public class Body extends Component implements Renderable, Updateable, Controlla
     this.scale = 1;
     this.zOrder = zOrder;
     
-    instructionQueue = new LinkedList<Instruction>();
-    instructionMap = new HashMap<Object, Instruction>();
     registerInstructions();
   }
 
   private void registerInstructions() {
-    instructionMap.put(
-        "turn left", 
+    set("turn left", 
         new Instruction() {
           @Override
           public void execute(GameContainer gc, StateBasedGame sb, int delta) {
@@ -56,8 +43,7 @@ public class Body extends Component implements Renderable, Updateable, Controlla
           }
         });
     
-    instructionMap.put(
-        "turn right",
+    set("turn right",
         new Instruction() {
           @Override
           public void execute(GameContainer gc, StateBasedGame sb, int delta) {
@@ -65,8 +51,7 @@ public class Body extends Component implements Renderable, Updateable, Controlla
           }
         });
     
-    instructionMap.put(
-        "run",
+    set("run",
         new Instruction() {
           @Override
           public void execute(GameContainer gc, StateBasedGame sb, int delta) {
@@ -77,8 +62,7 @@ public class Body extends Component implements Renderable, Updateable, Controlla
           }
         });
     
-    instructionMap.put(
-        "scale up",
+    set("scale up",
         new Instruction() {
           @Override
           public void execute(GameContainer gc, StateBasedGame sb, int delta) {
@@ -87,8 +71,7 @@ public class Body extends Component implements Renderable, Updateable, Controlla
           }
         });
     
-    instructionMap.put(
-        "scale down",
+    set("scale down",
         new Instruction() {
           @Override
           public void execute(GameContainer gc, StateBasedGame sb, int delta) {
@@ -104,37 +87,10 @@ public class Body extends Component implements Renderable, Updateable, Controlla
     image.draw(x, y, scale);
   }
   
-  @Override
-  public void update(GameContainer gc, StateBasedGame sb, int delta) {
-    while(! instructionQueue.isEmpty())
-      instructionQueue.poll().execute(gc, sb, delta);
-  }
-
   // interface methods
   @Override
   public int compareTo(Renderable o) {
     return CompareUtils.compareTo(this, o);
-  }
-  
-  @Override
-  public Set<Object> getInstructionSet() {
-    return Collections.unmodifiableSet(instructionMap.keySet());
-  }
-
-  @Override
-  public void execute(Object instruction) {
-    if(! understands(instruction))
-      return;
-    
-    instructionQueue.add(instructionMap.get(instruction));
-  }
-
-  @Override
-  public boolean understands(Object instruction) {
-    if(instruction == null)
-      return false;
-    
-    return instructionMap.containsKey(instruction);
   }
   
   // properties
