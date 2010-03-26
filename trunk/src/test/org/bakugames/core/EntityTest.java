@@ -18,7 +18,7 @@ import java.util.Map;
 
 import org.bakugames.core.exception.ComponentIdMismatchException;
 import org.bakugames.core.exception.IdConflictException;
-import org.bakugames.core.mock.ControllableComponent;
+import org.bakugames.core.mock.GenericControllableComponent;
 import org.bakugames.core.mock.RenderableAndUpdateableComponent;
 import org.bakugames.core.mock.RenderableComponent;
 import org.bakugames.core.mock.UpdateableComponent;
@@ -283,7 +283,7 @@ public class EntityTest {
     RenderableAndUpdateableComponent ru = new RenderableAndUpdateableComponent("ru", e);
     RenderableComponent r = new RenderableComponent("r", e);
     UpdateableComponent u = new UpdateableComponent("u", e);
-    ControllableComponent c = new ControllableComponent("c", e, "a");
+    GenericControllableComponent c = new GenericControllableComponent("c", e, "a");
     
     assertEquals(0, ru.renderCount);
     assertEquals(0, r.renderCount);
@@ -347,7 +347,7 @@ public class EntityTest {
   
   @Test
   public void execute() {
-    ControllableComponent c = new ControllableComponent("c", e, "a", "b", "c");
+    GenericControllableComponent c = new GenericControllableComponent("c", e, "a", "b", "c");
     
     assertEquals(0, c.instructionsExecuted.size());
     
@@ -375,7 +375,7 @@ public class EntityTest {
   
   @Test
   public void understands() {
-    e.plug(new ControllableComponent("c", "a", "b", "c"));
+    e.plug(new GenericControllableComponent("c", "a", "b", "c"));
     
     assertTrue(e.understands("a"));
     assertTrue(e.understands("b"));
@@ -387,8 +387,8 @@ public class EntityTest {
   
   @Test
   public void multipleControllables() {
-    ControllableComponent c1 = new ControllableComponent("c1", e, "a", "b", "c");
-    ControllableComponent c2 = new ControllableComponent("c2", e, "d", "e", "f");
+    GenericControllableComponent c1 = new GenericControllableComponent("c1", e, "a", "b", "c");
+    GenericControllableComponent c2 = new GenericControllableComponent("c2", e, "d", "e", "f");
     
     assertEquals(6, e.getInstructionSet().size());
     assertTrue(e.getInstructionSet().containsAll(Arrays.asList("a", "b", "c", "d", "e", "f")));
@@ -410,8 +410,8 @@ public class EntityTest {
   
   @Test
   public void overlappingInstructionSets() {
-    ControllableComponent c1 = new ControllableComponent("c1", e, "a", "b", "c");
-    ControllableComponent c2 = new ControllableComponent("c2", e, "b", "c", "d");
+    GenericControllableComponent c1 = new GenericControllableComponent("c1", e, "a", "b", "c");
+    GenericControllableComponent c2 = new GenericControllableComponent("c2", e, "b", "c", "d");
     
     assertEquals(4, e.getInstructionSet().size());
     assertTrue(e.getInstructionSet().containsAll(Arrays.asList("a", "b", "c", "d")));

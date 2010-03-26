@@ -55,13 +55,13 @@ public class Entity implements Renderable, Updateable, Controllable {
       
       super.put(key, c);
       
-      if(c instanceof Renderable)
+      if(c instanceof Renderable && ! entity.renderableComponents.contains(c))
         entity.renderableComponents.add((Renderable) c);
       
-      if(c instanceof Updateable)
+      if(c instanceof Updateable && ! entity.updateableComponents.contains(c))
         entity.updateableComponents.add((Updateable) c);
       
-      if(c instanceof Controllable)
+      if(c instanceof Controllable && ! entity.controllableComponents.contains(c))
         entity.controllableComponents.add((Controllable) c);
       
       return c;
