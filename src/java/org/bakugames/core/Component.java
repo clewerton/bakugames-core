@@ -15,9 +15,9 @@ public class Component {
     setOwner0(owner);
   }
 
-  public <T> T as(Class<T> type) {
+  public <T> T as(Class<T> type) throws IllegalArgumentException, ClassCastException {
     if(type == null)
-      throw new IllegalArgumentException(String.valueOf(type));
+      throw new IllegalArgumentException("null");
     
     return type.cast(this);
   }
@@ -32,18 +32,18 @@ public class Component {
   }
 
   private void setOwner0(Entity owner) {
-    if(this.owner == owner)
+    if(this.owner == owner) // new boss, same as the old boss 
       return;
     
-    if(owner != null && owner.has(getId()))
+    if(owner != null && owner.has(getId())) // there's a spy around here!
       throw new IdConflictException(getId());
     
-    if(this.owner != null && this.owner.has(getId()))
+    if(this.owner != null && this.owner.has(getId())) // pull the plug
       this.owner.unplug(getId());
     
     this.owner = owner;
     
-    if(owner != null)
+    if(owner != null) // hook me up
       owner.plug(this);
   }
   
@@ -53,7 +53,7 @@ public class Component {
   
   private void setId0(String id) throws IllegalArgumentException {
     if(id == null)
-      throw new IllegalArgumentException(id);
+      throw new IllegalArgumentException("null");
     
     this.id = id;
   }

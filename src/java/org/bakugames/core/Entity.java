@@ -106,8 +106,9 @@ public class Entity implements Renderable, Updateable, Controllable {
   private Map<String, Component> componentMap;
   private int zOrder;
   
-  // these two lists are backed by componentMap, so they won't be
+  // these lists are backed by componentMap, so they won't be
   // accessed anywhere else but here 
+  // TODO use TreeSet instead?
   private List<Renderable> renderableComponents; // sorted by z-order
   private List<Updateable> updateableComponents;
   private List<Controllable> controllableComponents;
@@ -155,13 +156,10 @@ public class Entity implements Renderable, Updateable, Controllable {
   
   public <T> T getAs(String id, Class<T> type) {
     if(type == null)
-      throw new IllegalArgumentException(String.valueOf(type));
+      throw new IllegalArgumentException("null");
     
     Component c = get(id);
-    if(c == null)
-      return null;
-    
-    return c.as(type);
+    return (c != null) ? c.as(type) : null;
   }
   
   public boolean has(String id) {
@@ -225,8 +223,8 @@ public class Entity implements Renderable, Updateable, Controllable {
   }
 
   @Override
-  public void execute(Object instruction) {
-    orderComponents(instruction);
+  public void execute(Object instructionId) {
+    orderComponents(instructionId);
   }
 
   protected void renderComponents(GameContainer gc, StateBasedGame sb, Graphics gr) {
@@ -258,15 +256,15 @@ public class Entity implements Renderable, Updateable, Controllable {
   }
 
   private void setWorld0(World world) {
-    if(this.world == world)
+    if(this.world == world) // nothing changes
       return;
     
-    if(this.world != null && this.world.contains(this))
+    if(this.world != null && this.world.contains(this)) // 3, 2, 1, BLASTOFF!
       this.world.remove(this);
     
     this.world = world;
     
-    if(world != null)
+    if(world != null) // Toto, I don't think we're in Kansas anymore
       world.add(this);
   }
 
