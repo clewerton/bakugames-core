@@ -6,6 +6,8 @@ package example.simpletestgame;
 
 import org.bakugames.core.Entity;
 import org.bakugames.core.World;
+import org.bakugames.core.input.AbstractInputBasedPlayer;
+import org.bakugames.core.input.InputBasedPlayer;
 import org.bakugames.core.input.Player;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -21,6 +23,7 @@ public class SlickBasicGame extends BasicGameState {
   
   private World world;
   private Player player;
+  private InputBasedPlayer controller;
   
   private int id;
   
@@ -44,15 +47,20 @@ public class SlickBasicGame extends BasicGameState {
     land.plug(new BackgroundRenderer(new Image("examples/resources/land.jpg")));
     
     player = new AIPlayer(plane);
+    controller = new AbstractInputBasedPlayer() {
+      @Override
+      protected void emitInstruction(Object instructionId) {
+        if("exit".equals(instructionId))
+          System.exit(0);
+      }
+    };
+    
+    controller.bind(new KeyDownControl(Input.KEY_ESCAPE), "exit");
   }
 
   @Override
   public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-    Input input = gc.getInput();
-    
-    if(input.isKeyDown(Input.KEY_ESCAPE))
-      System.exit(0);
-    
+    controller.update(gc, sbg, delta);
     world.update(gc, sbg, delta);
     player.update(gc, sbg, delta);
   }
