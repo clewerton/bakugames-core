@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class WorldTest {
@@ -125,7 +126,7 @@ public class WorldTest {
   }
   
   @Test
-  public void renderAndUpdate() {
+  public void renderAndUpdate() throws SlickException {
     Entity e = new Entity(w);
     RenderableAndUpdateableComponent c = new RenderableAndUpdateableComponent("c", e);
     

@@ -9,6 +9,7 @@ import org.bakugames.util.CompareUtils;
 import org.bakugames.util.SortedList;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class World implements Renderable, Updateable {
@@ -89,7 +90,7 @@ public class World implements Renderable, Updateable {
   }
 
   @Override
-  public void update(GameContainer gc, StateBasedGame sb, int delta) {
+  public void update(GameContainer gc, StateBasedGame sb, int delta) throws SlickException {
     updateEntities(gc, sb, delta);
   }
 
@@ -98,7 +99,7 @@ public class World implements Renderable, Updateable {
       e.render(gc, sb, gr);
   }
 
-  protected void updateEntities(GameContainer gc, StateBasedGame sb, int delta) {
+  protected void updateEntities(GameContainer gc, StateBasedGame sb, int delta) throws SlickException {
     for(Entity e : getEntities())
       e.update(gc, sb, delta);
   }

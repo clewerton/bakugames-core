@@ -2,7 +2,7 @@ package example.simpletestgame;
 
 import org.bakugames.core.Entity;
 import org.bakugames.core.input.Instruction;
-import org.bakugames.core.traits.AbstractControllableComponent;
+import org.bakugames.core.traits.BasicControllableComponent;
 import org.bakugames.core.traits.Renderable;
 import org.bakugames.core.traits.Updateable;
 import org.bakugames.util.CompareUtils;
@@ -11,7 +11,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class Body extends AbstractControllableComponent implements Renderable, Updateable {
+public class Body extends BasicControllableComponent implements Renderable, Updateable {
   private float x;
   private float y;
   private float scale;
@@ -35,7 +35,7 @@ public class Body extends AbstractControllableComponent implements Renderable, U
   }
 
   private void registerInstructions() {
-    set("turn left", 
+    getImplementation().set("turn left", 
         new Instruction() {
           @Override
           public void execute(GameContainer gc, StateBasedGame sb, int delta) {
@@ -43,7 +43,7 @@ public class Body extends AbstractControllableComponent implements Renderable, U
           }
         });
     
-    set("turn right",
+    getImplementation().set("turn right",
         new Instruction() {
           @Override
           public void execute(GameContainer gc, StateBasedGame sb, int delta) {
@@ -51,7 +51,7 @@ public class Body extends AbstractControllableComponent implements Renderable, U
           }
         });
     
-    set("run",
+    getImplementation().set("run",
         new Instruction() {
           @Override
           public void execute(GameContainer gc, StateBasedGame sb, int delta) {
@@ -62,7 +62,7 @@ public class Body extends AbstractControllableComponent implements Renderable, U
           }
         });
     
-    set("scale up",
+    getImplementation().set("scale up",
         new Instruction() {
           @Override
           public void execute(GameContainer gc, StateBasedGame sb, int delta) {
@@ -71,7 +71,7 @@ public class Body extends AbstractControllableComponent implements Renderable, U
           }
         });
     
-    set("scale down",
+    getImplementation().set("scale down",
         new Instruction() {
           @Override
           public void execute(GameContainer gc, StateBasedGame sb, int delta) {

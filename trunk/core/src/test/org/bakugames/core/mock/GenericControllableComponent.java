@@ -9,6 +9,7 @@ import org.bakugames.core.Component;
 import org.bakugames.core.Entity;
 import org.bakugames.core.traits.Controllable;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class GenericControllableComponent extends Component implements Controllable {
@@ -50,7 +51,7 @@ public class GenericControllableComponent extends Component implements Controlla
   }
 
   @Override
-  public void update(GameContainer gc, StateBasedGame sb, int delta) {
+  public void update(GameContainer gc, StateBasedGame sb, int delta) throws SlickException {
     updateCount++;
   }
 }

@@ -6,6 +6,7 @@ import org.bakugames.core.traits.Renderable;
 import org.bakugames.core.traits.Updateable;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class RenderableAndUpdateableComponent extends Component implements Renderable, Updateable {
@@ -27,7 +28,7 @@ public class RenderableAndUpdateableComponent extends Component implements Rende
   }
 
   @Override
-  public void update(GameContainer gc, StateBasedGame sb, int delta) {
+  public void update(GameContainer gc, StateBasedGame sb, int delta) throws SlickException {
     updateCount++;
   }
 
