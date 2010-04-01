@@ -25,6 +25,7 @@ import org.bakugames.core.mock.UpdateableComponent;
 import org.bakugames.core.traits.Renderable;
 import org.junit.Before;
 import org.junit.Test;
+import org.newdawn.slick.SlickException;
 
 public class EntityTest {
   private Entity e;
@@ -279,7 +280,7 @@ public class EntityTest {
   }
   
   @Test
-  public void renderAndUpdate() {
+  public void renderAndUpdate() throws SlickException {
     RenderableAndUpdateableComponent ru = new RenderableAndUpdateableComponent("ru", e);
     RenderableComponent r = new RenderableComponent("r", e);
     UpdateableComponent u = new UpdateableComponent("u", e);

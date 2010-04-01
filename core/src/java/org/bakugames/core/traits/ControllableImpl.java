@@ -7,30 +7,23 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import org.bakugames.core.Component;
-import org.bakugames.core.Entity;
 import org.bakugames.core.input.Instruction;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-public abstract class AbstractControllableComponent extends Component implements Controllable {
+public class ControllableImpl implements Controllable {
   private Queue<Instruction> instructionQueue;
   private Map<Object, Instruction> instructionMap;
 
-  public AbstractControllableComponent(String id) {
-    this(id, null);
-  }
-  
-  public AbstractControllableComponent(String id, Entity entity) {
-    super(id, entity);
-    
+  public ControllableImpl() {
     instructionQueue = new LinkedList<Instruction>();
     instructionMap = new HashMap<Object, Instruction>();
   }
 
   // Controllable operations
   @Override
-  public void update(GameContainer gc, StateBasedGame sb, int delta) {
+  public void update(GameContainer gc, StateBasedGame sb, int delta) throws SlickException {
     executeInstructions(gc, sb, delta);
   }
 
@@ -57,23 +50,26 @@ public abstract class AbstractControllableComponent extends Component implements
 
   // helper methods
   protected void executeInstructions(GameContainer gc, StateBasedGame sb, int delta) {
-    while(hasUnprocessedInstructions())
+    while(hasInstructionsQueued())
       dequeue().execute(gc, sb, delta);
   }
 
   // map operations
-  protected Instruction get(Object id) {
+  public Instruction get(Object id) {
+    if(id == null)
+      return null;
+    
     return getInstructionMap().get(id);
   }
   
-  protected void set(Object id, Instruction instruction) {
+  public void set(Object id, Instruction instruction) {
     if(id == null || instruction == null)
-      throw new IllegalArgumentException("id = " + id + ", instruction = " + instruction);
+      throw new IllegalArgumentException(id + ", " + instruction);
     
     getInstructionMap().put(id, instruction);
   }
   
-  protected Instruction remove(Object id) {
+  public Instruction remove(Object id) {
     if(id == null)
       return null;
     
@@ -81,24 +77,27 @@ public abstract class AbstractControllableComponent extends Component implements
   }
   
   // queue operations
-  protected void enqueue(Instruction instruction) {
-    getInstructionQueue().add(instruction);
+  public void enqueue(Instruction e) {
+    if(e == null)
+      return;
+    
+    getInstructionQueue().add(e);
   }
-  
-  protected Instruction dequeue() {
+
+  public Instruction dequeue() {
     return getInstructionQueue().poll();
   }
-  
-  protected boolean hasUnprocessedInstructions() {
+
+  public boolean hasInstructionsQueued() {
     return ! getInstructionQueue().isEmpty();
   }
-  
+
   // properties
-  protected Map<Object, Instruction> getInstructionMap() {
+  public Map<Object, Instruction> getInstructionMap() {
     return instructionMap;
   }
   
-  protected Queue<Instruction> getInstructionQueue() {
+  public Queue<Instruction> getInstructionQueue() {
     return instructionQueue;
   }
 }

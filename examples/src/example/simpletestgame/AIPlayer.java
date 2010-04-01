@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.bakugames.core.Entity;
 import org.bakugames.core.input.Player;
+import org.bakugames.core.traits.Controllable;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class AIPlayer implements Player {
@@ -23,7 +25,7 @@ public class AIPlayer implements Player {
       time = 0;
     }
     
-    public boolean execute(Entity entity, int delta) {
+    public boolean execute(Controllable entity, int delta) {
       time += delta;
       
       if(time < delay) {
@@ -48,10 +50,15 @@ public class AIPlayer implements Player {
   }
 
   @Override
-  public void update(GameContainer gc, StateBasedGame sb, int delta) {
+  public void update(GameContainer gc, StateBasedGame sb, int delta) throws SlickException {
     Step step = script.get(cursor);
     
-    if(step.execute(entity, delta))
+    if(step.execute(getControlled(), delta))
       cursor = (cursor + 1) % script.size();
+  }
+
+  @Override
+  public Controllable getControlled() {
+    return entity;
   }
 }

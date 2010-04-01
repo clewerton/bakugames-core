@@ -9,17 +9,15 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 
-import org.bakugames.core.Entity;
 import org.bakugames.core.input.Instruction;
-import org.bakugames.core.mock.UsesAbstractControllableComponent;
 import org.junit.Before;
 import org.junit.Test;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class AbstractControllableComponentTest {
-  private AbstractControllableComponent c;
-  private Entity e;
+public class ControllableImplTest {
+  private ControllableImpl c;
   private Instruction iA;
   private Instruction iB;
   private Instruction iC;
@@ -30,8 +28,7 @@ public class AbstractControllableComponentTest {
   
   @Before
   public void setUp() {
-    c = new UsesAbstractControllableComponent("c");
-    e = new Entity();
+    c = new ControllableImpl();
     
     iA = new Instruction() {
       @Override
@@ -61,9 +58,7 @@ public class AbstractControllableComponentTest {
   
   @Test
   public void getSetRemove() {
-    e.plug(c);
-    
-    assertTrue(e.getInstructionSet().isEmpty());
+    assertTrue(c.getInstructionSet().isEmpty());
     assertNull(c.get("a"));
     assertNull(c.get("b"));
     assertNull(c.get("c"));
@@ -72,16 +67,16 @@ public class AbstractControllableComponentTest {
     c.set("b", iB);
     c.set("c", iC);
     
-    assertTrue(e.getInstructionSet().containsAll(Arrays.asList("a", "b", "c")));
-    assertEquals(3, e.getInstructionSet().size());
+    assertTrue(c.getInstructionSet().containsAll(Arrays.asList("a", "b", "c")));
+    assertEquals(3, c.getInstructionSet().size());
     assertSame(iA, c.get("a"));
     assertSame(iB, c.get("b"));
     assertSame(iC, c.get("c"));
     
     assertSame(iB, c.remove("b"));
     
-    assertTrue(e.getInstructionSet().containsAll(Arrays.asList("a", "c")));
-    assertEquals(2, e.getInstructionSet().size());
+    assertTrue(c.getInstructionSet().containsAll(Arrays.asList("a", "c")));
+    assertEquals(2, c.getInstructionSet().size());
     assertSame(iA, c.get("a"));
     assertNull(c.get("b"));
     assertSame(iC, c.get("c"));
@@ -115,9 +110,7 @@ public class AbstractControllableComponentTest {
   }
   
   @Test
-  public void executeAndUpdate() {
-    e.plug(c);
-    
+  public void executeAndUpdate() throws SlickException {
     c.set("a", iA);
     c.set("b", iB);
     c.set("c", iC);
@@ -127,35 +120,35 @@ public class AbstractControllableComponentTest {
     assertFalse(iCWasExecuted);
     assertTrue(c.getInstructionQueue().isEmpty());
     
-    e.execute("a");
+    c.execute("a");
     
     assertFalse(iAWasExecuted);
     assertFalse(iBWasExecuted);
     assertFalse(iCWasExecuted);
     assertArrayEquals(new Object[] { iA }, c.getInstructionQueue().toArray());
     
-    e.execute("b");
+    c.execute("b");
     
     assertFalse(iAWasExecuted);
     assertFalse(iBWasExecuted);
     assertFalse(iCWasExecuted);
     assertArrayEquals(new Object[] { iA, iB }, c.getInstructionQueue().toArray());
     
-    e.update(null, null, 0);
+    c.update(null, null, 0);
     
     assertTrue(iAWasExecuted);
     assertTrue(iBWasExecuted);
     assertFalse(iCWasExecuted);
     assertTrue(c.getInstructionQueue().isEmpty());
     
-    e.execute("c");
+    c.execute("c");
     
     assertTrue(iAWasExecuted);
     assertTrue(iBWasExecuted);
     assertFalse(iCWasExecuted);
     assertArrayEquals(new Object[] { iC }, c.getInstructionQueue().toArray());
     
-    e.update(null, null, 0);
+    c.update(null, null, 0);
     
     assertTrue(iAWasExecuted);
     assertTrue(iBWasExecuted);
@@ -164,18 +157,53 @@ public class AbstractControllableComponentTest {
   }
   
   @Test
-  public void executeNull() {
-    e.plug(c);
+  public void enqueueAndDequeue() {
+    assertFalse(c.hasInstructionsQueued());
     
+    c.enqueue(iA);
+    c.enqueue(iB);
+    c.enqueue(iC);
+    c.enqueue(iA);
+    
+    assertTrue(c.hasInstructionsQueued());
+    assertArrayEquals(new Object[] { iA, iB, iC, iA }, c.getInstructionQueue().toArray());
+    
+    assertSame(iA, c.dequeue());
+    assertSame(iB, c.dequeue());
+    assertSame(iC, c.dequeue());
+    assertSame(iA, c.dequeue());
+    
+    assertFalse(c.hasInstructionsQueued());
+  }
+  
+  @Test
+  public void enqueueNull() {
+    assertFalse(c.hasInstructionsQueued());
+    
+    c.enqueue(null);
+    
+    assertFalse(c.hasInstructionsQueued());
+  }
+  
+  @Test
+  public void dequeueEmptyQueue() {
+    assertFalse(c.hasInstructionsQueued());
+    assertNull(c.dequeue());
+    assertNull(c.dequeue());
+    assertFalse(c.hasInstructionsQueued());
+  }
+  
+  @Test
+  public void executeNull() {
     c.set("a", iA);
     c.set("b", iB);
     c.set("c", iC);
     
-    assertTrue(c.getInstructionQueue().isEmpty());
+    assertFalse(c.hasInstructionsQueued());
     
-    e.execute("ijosajiosa");
+    c.execute("ijosajiosa");
     
-    assertTrue(c.getInstructionQueue().isEmpty());
+    assertFalse(c.hasInstructionsQueued());
   }
   
   @Test
@@ -185,8 +213,6 @@ public class AbstractControllableComponentTest {
     c.set("a", iA);
     
     assertTrue(c.understands("a"));
-    
     assertFalse(c.understands(null));
-    
   }
 }

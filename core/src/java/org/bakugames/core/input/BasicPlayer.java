@@ -7,14 +7,19 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.bakugames.core.traits.Controllable;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-public abstract class AbstractInputBasedPlayer implements InputBasedPlayer {
+public class BasicPlayer implements InputBasedPlayer {
   private Map<Control, Object> inputMap;
-
-  public AbstractInputBasedPlayer() {
+  private Controllable controlled;
+  
+  public BasicPlayer(Controllable controlled) {
+    this.controlled = controlled;
+    
     inputMap = new HashMap<Control, Object>();
   }
 
@@ -66,15 +71,25 @@ public abstract class AbstractInputBasedPlayer implements InputBasedPlayer {
   }
 
   @Override
-  public void update(GameContainer gc, StateBasedGame sb, int delta) {
-    checkForInput(gc.getInput());
-  }
-
-  protected void checkForInput(Input input) {
+  public void update(GameContainer gc, StateBasedGame sb, int delta) throws SlickException {
+    if(getControlled() == null)
+      return;
+    
+    Input input = gc.getInput();
+    
     for(Control control : getControls())
       if(control.happened(input))
-        emitInstruction(get(control));
+        getControlled().execute(get(control));
+    
+    getControlled().update(gc, sb, delta);
+  }
+  
+  @Override
+  public Controllable getControlled() {
+    return controlled;
   }
 
-  protected abstract void emitInstruction(Object instructionId);
+  protected void setControlled(Controllable controlled) {
+    this.controlled = controlled;
+  }
 }

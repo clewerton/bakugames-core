@@ -6,9 +6,10 @@ package example.simpletestgame;
 
 import org.bakugames.core.Entity;
 import org.bakugames.core.World;
-import org.bakugames.core.input.AbstractInputBasedPlayer;
+import org.bakugames.core.input.BasicPlayer;
 import org.bakugames.core.input.InputBasedPlayer;
-import org.bakugames.core.input.Player;
+import org.bakugames.core.input.Instruction;
+import org.bakugames.core.traits.ControllableImpl;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -22,7 +23,7 @@ public class SlickBasicGame extends BasicGameState {
   private Entity land;
   
   private World world;
-  private Player player;
+  private InputBasedPlayer player;
   private InputBasedPlayer controller;
   
   private int id;
@@ -46,15 +47,23 @@ public class SlickBasicGame extends BasicGameState {
     land = new Entity(world, 0);
     land.plug(new BackgroundRenderer(new Image("examples/resources/land.jpg")));
     
-    player = new AIPlayer(plane);
-    controller = new AbstractInputBasedPlayer() {
-      @Override
-      protected void emitInstruction(Object instructionId) {
-        if("exit".equals(instructionId))
-          System.exit(0);
-      }
-    };
+    player = new BasicPlayer(plane);
+    player.bind(new KeyDownControl(Input.KEY_A), "turn left");
+    player.bind(new KeyDownControl(Input.KEY_D), "turn right");
+    player.bind(new KeyDownControl(Input.KEY_W), "run");
+    player.bind(new KeyDownControl(Input.KEY_2), "scale up");
+    player.bind(new KeyDownControl(Input.KEY_1), "scale down");
     
+    controller = new BasicPlayer(
+        new ControllableImpl() {{
+          set("exit", 
+              new Instruction() {
+                @Override
+                public void execute(GameContainer gc, StateBasedGame sb, int delta) {
+                  System.exit(0);
+                }
+              });
+        }});
     controller.bind(new KeyDownControl(Input.KEY_ESCAPE), "exit");
   }
 

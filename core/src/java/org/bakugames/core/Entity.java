@@ -16,6 +16,7 @@ import org.bakugames.util.CompareUtils;
 import org.bakugames.util.SortedList;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class Entity implements Renderable, Updateable, Controllable {
@@ -218,7 +219,7 @@ public class Entity implements Renderable, Updateable, Controllable {
   }
 
   @Override
-  public void update(GameContainer gc, StateBasedGame sb, int delta) {
+  public void update(GameContainer gc, StateBasedGame sb, int delta) throws SlickException {
     updateComponents(gc, sb, delta);
   }
 
@@ -232,7 +233,7 @@ public class Entity implements Renderable, Updateable, Controllable {
       r.render(gc, sb, gr);
   }
   
-  protected void updateComponents(GameContainer gc, StateBasedGame sb, int delta) {
+  protected void updateComponents(GameContainer gc, StateBasedGame sb, int delta) throws SlickException {
     for(Updateable u : updateableComponents)
       u.update(gc, sb, delta);
   }

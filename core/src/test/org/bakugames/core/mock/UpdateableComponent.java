@@ -4,6 +4,7 @@ import org.bakugames.core.Component;
 import org.bakugames.core.Entity;
 import org.bakugames.core.traits.Updateable;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class UpdateableComponent extends Component implements Updateable {
@@ -18,7 +19,7 @@ public class UpdateableComponent extends Component implements Updateable {
   }
 
   @Override
-  public void update(GameContainer gc, StateBasedGame sb, int delta) {
+  public void update(GameContainer gc, StateBasedGame sb, int delta) throws SlickException {
     updateCount++;
   }
 }
