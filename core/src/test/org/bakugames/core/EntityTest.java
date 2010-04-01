@@ -436,4 +436,24 @@ public class EntityTest {
     assertArrayEquals(new Object[] { "a", "c", "b" }, c1.instructionsExecuted.toArray());
     assertArrayEquals(new Object[] { "d", "c", "b" }, c2.instructionsExecuted.toArray());
   }
+  
+  @Test(expected = UnsupportedOperationException.class)
+  public void changingInstructionSet() {
+    e.getInstructionSet().add("aknoksa");
+  }
+  
+  @Test(expected = UnsupportedOperationException.class)
+  public void changingInstructionSet2() {
+    e.getInstructionSet().addAll(Arrays.asList("aknoksa", new Object()));
+  }
+  
+  @Test(expected = UnsupportedOperationException.class)
+  public void changingInstructionSet3() {
+    e.getInstructionSet().remove("aknoksa");
+  }
+  
+  @Test(expected = UnsupportedOperationException.class)
+  public void changingInstructionSet4() {
+    e.getInstructionSet().removeAll(Arrays.asList("aknoksa", new Object()));
+  }
 }

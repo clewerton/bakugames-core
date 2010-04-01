@@ -285,6 +285,5 @@ public class BasicPlayerTest {
     assertEquals(2, aCounter);
     assertEquals(2, bCounter);
     assertEquals(2, cCounter);
-    
   }
 }
