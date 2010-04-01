@@ -215,4 +215,24 @@ public class ControllableImplTest {
     assertTrue(c.understands("a"));
     assertFalse(c.understands(null));
   }
+  
+  @Test(expected = UnsupportedOperationException.class)
+  public void changingInstructionSet() {
+    c.getInstructionSet().add("aknoksa");
+  }
+  
+  @Test(expected = UnsupportedOperationException.class)
+  public void changingInstructionSet2() {
+    c.getInstructionSet().addAll(Arrays.asList("aknoksa", new Object()));
+  }
+  
+  @Test(expected = UnsupportedOperationException.class)
+  public void changingInstructionSet3() {
+    c.getInstructionSet().remove("aknoksa");
+  }
+  
+  @Test(expected = UnsupportedOperationException.class)
+  public void changingInstructionSet4() {
+    c.getInstructionSet().removeAll(Arrays.asList("aknoksa", new Object()));
+  }
 }

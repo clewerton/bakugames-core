@@ -1,6 +1,7 @@
 package org.bakugames.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -209,7 +210,7 @@ public class Entity implements Renderable, Updateable, Controllable {
     for(Controllable c : controllableComponents)
       instructionSet.addAll(c.getInstructionSet());
       
-    return instructionSet;
+    return Collections.unmodifiableSet(instructionSet);
   }
   
   // Slick operations
