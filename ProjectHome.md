@@ -1,0 +1,1 @@
+Java Game Framework based on Slick Framework (http://slick.cokeandcode.com/), aimed at 2D games.
